@@ -15,7 +15,7 @@
 
 Este trabalho analisa o sistema Poker Adversarial, com foco na interação específica jogo de poker.
 
-O sistema é adversarial porque contém diversos participantes e todos são adversários. Os participantes observam as respostas do outro e da mesa e adaptam suas ações ao longo das rodadas.
+O sistema é adversarial porque contém diversos agentes e todos são adversários entre si, buscando ganhar o jogo. Os participantes observam as respostas do outro e da mesa e adaptam suas ações ao longo das rodadas.
 
 > **Escopo:** a análise não cobre todo o domínio de jogos de cartas ou todas as regras do poker. Ela se limita a dois jogadores, uma mão, três rodadas de apostas, fichas virtuais e informações parcialmente ocultas. O sistema deverá registrar as ações, atualizar o pote, indicar as informações observáveis e permitir que cada jogador adapte sua estratégia com base nas ações anteriores.
 
@@ -29,16 +29,16 @@ Descreva o fluxo escolhido do início ao fim:
 O sistema inicia uma nova mão, distribui cartas privadas aos dois jogadores e define o jogador que agirá primeiro.
 
 2. Ação do primeiro participante:
-O Jogador A observa suas cartas e realiza uma ação: aposta, aumenta a aposta ou passa.
+O Jogador A observa suas cartas e realiza uma ação: paga a aposta, aumenta a aposta, all win ou passa.
 
 3. Resposta do sistema ou do outro participante:
-O sistema atualiza o pote e informa a ação ao Jogador B. O Jogador B decide entre pagar, aumentar ou desistir, com base em suas próprias cartas, na aposta observada e no comportamento anterior do Jogador A.
+O sistema atualiza o pote e informa a ação ao Jogador B. O Jogador B decide entre pagar, aumentar, desistir ou all win, com base em suas próprias cartas, na aposta observada e no comportamento anterior do Jogador A.
 
 4. Resultado observado:
-Os jogadores observam o valor do pote, o histórico de apostas, as cartas comunitárias reveladas e se o adversário continua ou abandona a mão. Essas informações podem indicar força, fraqueza ou tentativa de blefe.
+Os jogadores observam o valor do pote, o histórico de apostas, as cartas reveladas pelo dealer e se o adversário continua ou abandona a mão. Essas informações podem indicar força, fraqueza ou tentativa de blefe.
 
 5. Decisão ou adaptação seguinte:
-Na rodada seguinte, cada jogador adapta sua estratégia. O Jogador A pode aumentar a aposta para tentar representar uma mão forte, enquanto o Jogador B pode pagar, desistir ou aumentar para testar o possível blefe. O sistema revela novas cartas comunitárias e aplica novamente o ciclo de ação, resposta, observação e adaptação.
+Na rodada seguinte, cada jogador adapta sua estratégia. O Jogador A pode aumentar a aposta para tentar representar uma mão forte, enquanto o Jogador B pode pagar, desistir, aumentar ou all win para testar o possível blefe. O sistema revela novas cartas (turn e river) e aplica novamente o ciclo de ação, resposta, observação e adaptação.
 
 ### 1.2 Por que é um sistema adversarial?
 
