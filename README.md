@@ -1,29 +1,23 @@
 # Trabalho 1 — Análise de um Sistema Adversarial
 
-> **Status:** esqueleto inicial do relatório. Substitua os textos entre colchetes e remova as instruções antes da entrega.
-
 ## Identificação
 
-- **Disciplina:** [nome da disciplina]
-- **Turma:** [turma]
-- **Professor(a):** [nome]
-- **Data de entrega:** 06/10 às 23h59
-- **Grupo:** [nome ou número do grupo]
+- **Disciplina:** Engenharia de Software Adversarial
+- **Data de entrega:** 06/10
+- **Grupo:** Grupo 7
 - **Integrantes:**
-  - [Nome completo — matrícula]
-  - [Nome completo — matrícula]
-  - [Nome completo — matrícula]
-  - [Nome completo — matrícula]
-  - [Nome completo — matrícula]
-  - [Nome completo — matrícula]
+  - Rafael Barboza Torres (rafaelbarbozarafaelbarboza.aluno@unipampa.edu.br)
+  - Elton Henrique Lunardi Gimenes (eltongimenes.aluno@unipampa.edu.br)
+  - Frederico Marques da Silva Barcelos (fredericobarcelos.aluno@unipampa.edu.br)
+  - Diego Santos de Araujo (diegoaraujo.aluno@unipampa.edu.br)
 
 ## Resumo do sistema
 
-Este trabalho analisa o sistema **[nome do sistema]**, com foco na interação específica **[descrever uma única interação: publicar avaliação, comprar ingresso, reservar horário etc.]**.
+Este trabalho analisa o sistema Poker Adversarial, com foco na interação específica jogo de poker.
 
-O sistema é adversarial porque **[explicar o conflito de interesses e como um participante pode explorar uma regra, métrica ou decisão]**. Os participantes observam as respostas do sistema e adaptam suas ações ao longo das rodadas.
+O sistema é adversarial porque contém diversos participantes e todos são adversários. Os participantes observam as respostas do outro e da mesa e adaptam suas ações ao longo das rodadas.
 
-> **Escopo:** a análise não cobre todo o domínio de [domínio amplo]. Ela se limita a [interação delimitada], que será a base arquitetural para o Trabalho 2.
+> **Escopo:** a análise não cobre todo o domínio de jogos de cartas ou todas as regras do poker. Ela se limita a dois jogadores, uma mão, três rodadas de apostas, fichas virtuais e informações parcialmente ocultas. O sistema deverá registrar as ações, atualizar o pote, indicar as informações observáveis e permitir que cada jogador adapte sua estratégia com base nas ações anteriores.
 
 ## 1. Proposta e delimitação
 
@@ -31,11 +25,20 @@ O sistema é adversarial porque **[explicar o conflito de interesses e como um p
 
 Descreva o fluxo escolhido do início ao fim:
 
-1. [Evento que inicia a interação]
-2. [Ação do primeiro participante]
-3. [Resposta do sistema ou do outro participante]
-4. [Resultado observado]
-5. [Decisão ou adaptação seguinte]
+1. Evento que inicia a interação:
+O sistema inicia uma nova mão, distribui cartas privadas aos dois jogadores e define o jogador que agirá primeiro.
+
+2. Ação do primeiro participante:
+O Jogador A observa suas cartas e realiza uma ação: aposta, aumenta a aposta ou passa.
+
+3. Resposta do sistema ou do outro participante:
+O sistema atualiza o pote e informa a ação ao Jogador B. O Jogador B decide entre pagar, aumentar ou desistir, com base em suas próprias cartas, na aposta observada e no comportamento anterior do Jogador A.
+
+4. Resultado observado:
+Os jogadores observam o valor do pote, o histórico de apostas, as cartas comunitárias reveladas e se o adversário continua ou abandona a mão. Essas informações podem indicar força, fraqueza ou tentativa de blefe.
+
+5. Decisão ou adaptação seguinte:
+Na rodada seguinte, cada jogador adapta sua estratégia. O Jogador A pode aumentar a aposta para tentar representar uma mão forte, enquanto o Jogador B pode pagar, desistir ou aumentar para testar o possível blefe. O sistema revela novas cartas comunitárias e aplica novamente o ciclo de ação, resposta, observação e adaptação.
 
 ### 1.2 Por que é um sistema adversarial?
 
