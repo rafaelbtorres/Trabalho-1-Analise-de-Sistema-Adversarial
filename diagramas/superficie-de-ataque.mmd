@@ -1,0 +1,9 @@
+flowchart TB
+    U[Participante adversarial] --> I1[Interface: ...]
+    I1 --> R1[Regra/métrica: ...]
+    I1 --> C1[Componente: ...]
+    C1 --> F1[Fluxo: ...]
+    R1 --> AS[Ativo: ...]
+    F1 --> AS
+    L[Usuário legítimo] --> I2[Interface compartilhada: ...]
+    I2 --> C1
