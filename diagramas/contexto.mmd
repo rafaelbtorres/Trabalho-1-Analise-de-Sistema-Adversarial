@@ -1,6 +1,6 @@
 flowchart LR
-    A[Ator 1\nobjetivo: ...] -->|ação/interação| S((Sistema))
-    B[Ator 2\nobjetivo: ...] -->|ação/interação| S
-    S -->|resposta observável| A
-    S -->|resultado/métrica observável| B
-    S --> D[Ativo preservado\n...]
+    A["Agente A<br/>Objetivo: ganhar fichas"] <-->|Proposta de ação / visão filtrada| M["Motor da mão<br/>Valida, contabiliza e<br/>fornece visões filtradas"]
+    B["Agente B<br/>Objetivo: ganhar fichas"] <-->|Proposta de ação / visão filtrada| M
+    M --> R["Registro interno<br/>Auditoria após a mão"]
+    R --> O["Operador do grupo<br/>Analisa cenário sintético"]
+    M --> P["Preservar integridade,<br/>sigilo e progresso"]

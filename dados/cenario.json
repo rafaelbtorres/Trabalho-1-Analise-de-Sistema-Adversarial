@@ -1,0 +1,26 @@
+{
+  "tipo": "cenario_sintetico_manual",
+  "descricao": "Sequencia ilustrativa, nao resultado de simulador implementado",
+  "regras": {"primeiro_agente": "A", "apostas": [10, 20], "max_apostas_por_etapa": 1, "aumentos": false, "all_in": false},
+  "cartas_privadas": {"A": ["7c", "2d"], "B": ["Ah", "Ad"]},
+  "comunitarias": {"flop": ["As", "9h", "4c"], "turn": "Kc", "river": "3d"},
+  "convencao_naipes": {"c": "paus", "d": "ouros", "h": "copas", "s": "espadas"},
+  "antes_preparacao": {"A": 110, "B": 110, "pote": 0},
+  "contribuicoes_iniciais": {"A": 10, "B": 10},
+  "inicial": {"A": 100, "B": 100, "pote": 20},
+  "eventos": [
+    {"etapa": "flop", "agente": "A", "acao": "bet", "valor": 10, "apos": {"A": 90, "B": 100, "pote": 30}},
+    {"etapa": "flop", "agente": "B", "acao": "call", "valor": 10, "apos": {"A": 90, "B": 90, "pote": 40}},
+    {"etapa": "turn", "agente": "A", "acao": "check", "valor": 0, "apos": {"A": 90, "B": 90, "pote": 40}},
+    {"etapa": "turn", "agente": "B", "acao": "check", "valor": 0, "apos": {"A": 90, "B": 90, "pote": 40}},
+    {"etapa": "river", "agente": "A", "acao": "bet", "valor": 20, "apos": {"A": 70, "B": 90, "pote": 60}},
+    {"etapa": "river", "agente": "B", "acao": "call", "valor": 20, "apos": {"A": 70, "B": 70, "pote": 80}}
+  ],
+  "revelacao": {"vencedor": "B", "mao_A": ["As", "Kc", "9h", "7c", "4c"], "mao_B": ["Ah", "Ad", "As", "Kc", "9h"]},
+  "final": {"A": 70, "B": 150, "pote": 0},
+  "total_fichas": 220,
+  "matriz_preferencias": [[[0, 3], [3, 0]], [[1, 2], [1, 2]]],
+  "equilibrio_puro": {"acao_A": "A2", "politica_B": "B1"},
+  "riscos_condicionais_antes_controles": {"T1": {"P": 3, "I": 3, "risco": 9}, "T2": {"P": 3, "I": 3, "risco": 9}, "T3": {"P": 3, "I": 2, "risco": 6}},
+  "duracoes_slides_segundos": [40, 55, 70, 55, 50, 60, 45, 60, 60, 55, 55, 55]
+}

@@ -1,6 +1,8 @@
-flowchart LR
-    A[Ação do participante] --> R[Resposta do sistema/defensor]
-    R --> O[Observação: sinal, regra ou resultado]
-    O --> AD[Adaptação do participante e do defensor]
-    AD --> A
-    R -. custo potencial .-> L[Usuário legítimo afetado]
+flowchart TB
+    F["1. Flop<br/>A aposta 10; B paga<br/>A=90, B=90, pote=40"] --> O1["A observa resistência e planeja check<br/>B observa iniciativa e muda para indução"]
+    O1 --> T["2. Turn<br/>A dá check; B dá check<br/>A=90, B=90, pote=40"]
+    T --> O2["A interpreta check como possível fraqueza<br/>B induz nova aposta e aceita custo de oportunidade"]
+    O2 --> R["3. River<br/>A blefa 20; B paga<br/>A=70, B=70, pote=80"]
+    R --> S["Revelação: B vence com trinca de ases<br/>A=70, B=150, pote=0"]
+    S --> H["Hipótese para próxima interação<br/>Rever blefes e confiança nos sinais"]
+    O2 -.-> C["Custos: perder oportunidade de aposta<br/>ou permitir melhora da mão adversária"]

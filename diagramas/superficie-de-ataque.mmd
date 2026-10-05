@@ -1,9 +1,10 @@
-flowchart TB
-    U[Participante adversarial] --> I1[Interface: ...]
-    I1 --> R1[Regra/métrica: ...]
-    I1 --> C1[Componente: ...]
-    C1 --> F1[Fluxo: ...]
-    R1 --> AS[Ativo: ...]
-    F1 --> AS
-    L[Usuário legítimo] --> I2[Interface compartilhada: ...]
-    I2 --> C1
+flowchart LR
+    A["Módulo adversarial<br/>Inspeciona visão, envia ação,<br/>controla sua decisão"] --> V["T1: visão e histórico<br/>Campo privado sem filtro<br/>Falha de P1"]
+    A --> I["T2: entrada de ações<br/>Valor ou vez sem validação<br/>Falha de P2"]
+    A --> E["T3: executor<br/>Decisão sem limite<br/>Falha de P3"]
+    V --> S["Sigilo e justiça<br/>Risco 9"]
+    I --> F["Integridade e fichas<br/>Risco 9"]
+    E --> P["Progresso da mão<br/>Risco 6"]
+    V -.-> C1["C1: filtrar todas as saídas"]
+    I -.-> C2["C2/C3: validar e aplicar uma vez"]
+    E -.-> C4["C4: orçamento e ação padrão"]

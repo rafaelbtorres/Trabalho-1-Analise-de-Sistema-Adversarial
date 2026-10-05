@@ -1,0 +1,5 @@
+# Intermediarios de geracao e verificacao visual
+.build/
+.qa/
+node_modules/
+__pycache__/

@@ -1,0 +1,4 @@
+# Preservar os bytes dos artefatos de apresentacao e diagramas.
+*.pdf binary
+*.pptx binary
+*.png binary
