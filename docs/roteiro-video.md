@@ -35,13 +35,13 @@ As falas abaixo correspondem à modelagem incorporada ao README e aos 12 slides 
 
 **Responsável:** Rafael. **Tempo-alvo:** 55 segundos.
 
-**Na tela:** dois agentes; uma mão; flop → turn → river; fichas virtuais; estado inicial sintético; ações incluídas e principais exclusões.
+**Na tela:** dois agentes; uma mão; pré-flop → flop → turn → river; fichas virtuais; estado inicial sintético; ações incluídas e principais exclusões.
 
 **Fala sugerida:**
 
-> Delimitamos uma mão com três etapas: flop, turn e river. A preparação é fornecida como estado inicial, sem analisar decisões anteriores. Cada agente recebe suas cartas e observa as cartas públicas, as apostas, os saldos e o pote. O motor controla a vez e valida as decisões. Permitimos check, aposta, pagamento e desistência, com uma aposta de 10 ou 20 por etapa, estritamente menor que o saldo de cada agente. Excluímos aumentos, all-in e potes paralelos. Depois de duas ações check ou de uma aposta paga, avançamos de etapa; uma desistência encerra a mão. Usamos fichas virtuais num ambiente local. Essas simplificações mantêm a proposta viável para o Trabalho 2.
+> A mão começa antes do flop, com duas cartas privadas para cada agente e nenhuma comunitária aberta. A coloca small blind de 5 e B, big blind de 10. A age primeiro no pré-flop e B nas etapas seguintes. Permitimos check, bet, call, fold, raise e all-in, com fichas inteiras até o saldo. Um raise indica o total da etapa; call paga apenas a diferença. O mínimo de aposta é 10 e o de aumento acompanha o último aumento completo. All-in pago encerra as decisões de aposta: devolvemos excesso não coberto e revelamos as cartas restantes. O relatório também traz um blefe all-in pré-flop, além do percurso principal com quatro etapas.
 
-**Conferência:** as exclusões correspondem ao README atual. Se o grupo mudar as regras, revisar este slide, a matriz e toda a sequência.
+**Conferência:** posição, blinds, aumentos e all-in correspondem ao README 1.1. Mostrar que all-in pago conduz à revelação sem novas apostas.
 
 ## Slide 3 — Atores, ativo, pressupostos e contexto
 
@@ -59,7 +59,7 @@ As falas abaixo correspondem à modelagem incorporada ao README e aos 12 slides 
 
 **Responsável:** Elton. **Tempo-alvo:** 55 segundos.
 
-**Na tela:** pote 40, aposta 20, hipótese “B vence na revelação”; matriz ordinal 2×2; legenda `(A, B)`; nota “análise retrospectiva: cartas fixadas pelo analista”.
+**Na tela:** pote 80, aposta 20, hipótese “B vence na revelação”; matriz ordinal 2×2; legenda `(A, B)`; nota “análise retrospectiva: cartas fixadas pelo analista”.
 
 | A / política de B | Pagar se houver aposta | Desistir se houver aposta |
 |---|---:|---:|
@@ -68,7 +68,7 @@ As falas abaixo correspondem à modelagem incorporada ao README e aos 12 slides 
 
 **Fala sugerida:**
 
-> Esta matriz analisa retrospectivamente um cenário fixo: pote de 40, aposta de 20 e cartas com as quais B vence na revelação. O analista conhece os resultados; durante a mão, os agentes não conhecem as cartas do outro. A pode apostar ou dar check. B paga ou desiste diante da aposta; após check, ambas as políticas seguem para revelação. Se B paga, A perde 20 adicionais e B ganha 60 a partir desse ponto. Se B desiste, A ganha 40. Com check, A ganha zero e B recebe 40. A tabela converte esses ganhos em preferências. O equilíbrio descreve esse jogo reduzido, sem resolver a incerteza dos agentes durante a mão.
+> Esta matriz analisa o river após o check inicial de B, com pote de 80, aposta de 20 e cartas com as quais B vence. O analista conhece os resultados; os agentes não conhecem as cartas do outro. A aposta ou dá check. B paga ou desiste diante da aposta; check de A encerra a etapa. Raises e all-in continuam permitidos no sistema, mas estão fora desta tabela reduzida. Com call, A perde 20 adicionais e B ganha 100 desse ponto em diante. Com fold, A ganha 80. Com check, A ganha zero e B recebe 80. A tabela converte esses ganhos em preferências. Seu equilíbrio não resolve a incerteza durante a mão.
 
 **Conferência visual:** as contribuições anteriores estão excluídas do ganho líquido desta decisão. Se necessário, revelar as contas numa animação simples ou nas notas; não projetar duas tabelas minúsculas.
 
@@ -82,15 +82,15 @@ As falas abaixo correspondem à modelagem incorporada ao README e aos 12 slides 
 
 > Se B paga, A prefere check; se B desiste, A prefere apostar. A não tem estratégia dominante. Para B, pagar é melhor diante da aposta e empata com a outra política diante do check. Assim, pagar domina fracamente: é melhor numa linha e igual na outra. O único equilíbrio puro da tabela é check com a política de pagar. Nenhum jogador melhora mudando sozinho. Check com a política de desistir não é equilíbrio, pois A melhoraria apostando. Esse resultado conserva fichas e usa ações legais. As garantias de sigilo e justiça dependem também dos controles do motor; a matriz sozinha não as comprova.
 
-## Slide 6 — Três rodadas, observação e adaptação
+## Slide 6 — Quatro etapas, observação e adaptação
 
 **Responsável:** Elton. **Tempo-alvo:** 60 segundos.
 
-**Na tela:** três rodadas; A muda de pressão para observação e novo blefe; B muda de apostar com mão forte para induzir aposta com check; pote 20 → 40 → 40 → 80; saldos finais A 70 e B 150; cartas sintéticas conferidas.
+**Na tela:** quatro etapas desde o pré-flop; raises para 20; B muda de valor para indução; pote 15 → 40 → 80 → 80 → 120; saldos finais A 50 e B 170; all-in alternativo: fold 120/100, call 0/220.
 
 **Fala sugerida:**
 
-> Cada agente começa com 100 fichas e o pote contém 20 anteriores. No flop, A aposta 10 e B paga. A observa resistência e passa a dar check para observar. B vê a iniciativa de A e muda sua política: em vez de apostar ao receber check, tenta induzir outra aposta. No turn, ambos dão check. B aceita perder uma oportunidade de ganho; A interpreta esse sinal como fraqueza. No river, A blefa 20 e B paga, vencendo com trinca de ases. Os saldos finais são 70 e 150, conservando 220 fichas. A leitura de A falhou. Essa decisão fora do equilíbrio retrospectivo é possível porque os agentes usam heurísticas e informação parcial. Uma mão não demonstra uma estratégia ótima.
+> No pré-flop, A aumenta para 20 e B paga, levando o pote a 40. A mantém pressão pequena. No flop, B dá check, A aposta 10 e B aumenta para 20. A paga só mais 10. O pote chega a 80. O raise leva A à cautela; o call leva B a trocar aposta por valor por check visando indução. No turn, B dá check e A também. A interpreta a ausência de nova aposta como fraqueza. No river, B repete check, A blefa 20 e B paga. B vence com trinca: A termina com 50 e B com 170. No ramo all-in pré-flop, fold dá 120 a A; call leva à revelação sem novas apostas e, nesta mesa, B termina com 220.
 
 **Conferência:** mostrar as cartas sintéticas do plano: A = 7♣/2♦; B = A♥/A♦; mesa = A♠/9♥/4♣/K♣/3♦. Indicar que a apresentação mostra a visão do analista, enquanto os agentes não veem as cartas um do outro antes da revelação. Não dizer que foi feita uma simulação executável se o cenário foi apenas calculado manualmente.
 
@@ -104,7 +104,7 @@ As falas abaixo correspondem à modelagem incorporada ao README e aos 12 slides 
 
 **Fala sugerida:**
 
-> As três rodadas usam chamadas de observação, decisão e validação. Nessas mesmas interfaces, analisamos três desvios: T1 expõe cartas na visão de estado; T2 aceita uma ação inválida; T3 deixa uma decisão bloquear a execução. São cenários hipotéticos anteriores aos controles, supondo um agente deliberadamente adversarial e a fraqueza indicada. O diagrama liga cada ponto ao ativo afetado. As rodadas apresentadas seguem ações legais; os riscos mostram o que poderia falhar nessas chamadas. Blefar continua permitido. Perder legitimamente é diferente de perder porque o adversário recebeu informação privada ou alterou as regras.
+> As quatro etapas usam chamadas de observação, decisão e validação. Nessas mesmas interfaces, analisamos três desvios: T1 expõe cartas na visão de estado; T2 aceita uma ação inválida; T3 deixa uma decisão bloquear a execução. São cenários hipotéticos anteriores aos controles, supondo um agente deliberadamente adversarial e a fraqueza indicada. O diagrama liga cada ponto ao ativo afetado. As etapas apresentadas seguem ações legais; os riscos mostram o que poderia falhar nessas chamadas. Blefar continua permitido. Perder legitimamente é diferente de perder porque o adversário recebeu informação privada ou alterou as regras.
 
 ## Slide 8 — Três cenários e avaliação do risco
 
@@ -154,7 +154,7 @@ As falas abaixo correspondem à modelagem incorporada ao README e aos 12 slides 
 
 **Fala sugerida:**
 
-> A arquitetura possui motor e estado, provedor de visões, agentes, validador, executor e registro de eventos. O motor prepara a visão autorizada; o agente decide; a ação é validada; então o estado é atualizado. No Trabalho 2, verificaremos execução das três rodadas, conservação das fichas, sigilo e rejeição de ações inválidas. Também verificaremos o encerramento de decisões que excedem o orçamento. Para demonstrar adaptação, o registro interno relacionará observação, política anterior, política atual e ação, sem expor raciocínio privado ao oponente. Assim, poderemos conferir por que B passou a induzir apostas e por que A mudou sua pressão. Esses são critérios planejados, ainda sujeitos à implementação e aos testes.
+> A arquitetura possui motor e estado, provedor de visões, agentes, validador, executor e registro. Além de vez e saldo, o estado guarda contribuição por etapa, valor a pagar e último aumento completo. O motor calcula quanto transferir em raise, call e all-in. All-in pago devolve excesso e entra em runout sem pedir novas apostas. No Trabalho 2, verificaremos o percurso até 50 e 170, os ramos de all-in, conservação de fichas, sigilo e rejeição de ações inválidas. Os registros privados ligam observação, política anterior, política atual e custo, sem entregar o raciocínio ao oponente. São critérios planejados para implementação futura.
 
 ## Slide 12 — Pergunta final, fontes e participação
 
@@ -174,7 +174,7 @@ As falas abaixo correspondem à modelagem incorporada ao README e aos 12 slides 
 2. Criar uma apresentação com o formato e os 12 slides acima. Canva é a preferência indicada pelo enunciado; outra ferramenta pode ser usada se atender aos entregáveis.
 3. Inserir títulos e elementos visuais; deixar as falas nas notas. Evitar capturas pequenas do README.
 4. Apresentar a matriz com destaque visual das melhores respostas e mostrar a ordem dos pares. Não usar cores como única forma de distinguir A e B.
-5. Mostrar as três rodadas numa sequência, com os saldos e o sinal observado. Não depender apenas de animações: a versão PDF também precisa ser compreensível.
+5. Mostrar as quatro etapas numa sequência, com os saldos e o sinal observado. Não depender apenas de animações: a versão PDF também precisa ser compreensível.
 6. Dividir o diagrama de superfície e a tabela de risco em slides distintos para manter legibilidade.
 7. Colocar citações curtas junto aos conceitos e às regras apoiadas por fontes. Manter referências completas no README e em `fontes/referencias.md`.
 8. Exportar PDF, abrir o arquivo e conferir todos os slides, inclusive acentos, tabelas, cortes e links. Guardar em `apresentacao/slides.pdf`.
@@ -225,7 +225,10 @@ Se a gravação do Canva não funcionar, usar uma ferramenta de gravação de te
 |---|---|
 | Por que isso é um sistema de software adversarial? | Dois agentes decidem, disputam fichas e adaptam políticas; o motor medeia a interação. |
 | O motor precisa vencer um jogador? | Não; sua responsabilidade é preservar regras, estado e propriedades da mão. |
-| Por que usar três rodadas de uma mão? | Cada etapa produz informação para a próxima, atendendo ao ciclo dinâmico sem exigir um torneio. |
+| Por que usar quatro etapas de uma mão? | O pré-flop mostra a decisão sem comunitárias. Flop, turn e river conectam observação e adaptação, atendendo a pelo menos três ciclos. |
+| O all-in pré-flop não elimina as rodadas seguintes? | Se houver call, elimina novas decisões de aposta. Por isso, é um ramo alternativo ao percurso principal de quatro etapas. |
+| Raise para 20 transfere sempre 20? | Não. O total desejado menos a contribuição já feita determina a transferência. A transfere 15 no pré-flop; no flop, paga apenas mais 10 ao raise de B. |
+| E quando os saldos são diferentes? | Devolver a parte não coberta antes da comparação. No ramo 110/70 antes dos blinds, devolver 40 e disputar apenas 140. |
 | Como B sabe que vence na matriz? | Não recebe cartas de A; a vitória de B é condição do exemplo usada na análise. O modelo não resolve toda a informação incompleta. |
 | Por que o river observado não termina no equilíbrio da matriz? | O equilíbrio pertence à análise retrospectiva de um cenário fixo; A usa uma heurística sob informação parcial e interpreta o check de B incorretamente. |
 | Onde B realmente se adapta? | Depois da iniciativa de A, troca a intenção de apostar com mão forte por check para tentar induzir outra aposta; pode perder ganho ou permitir melhora da mão adversária. |

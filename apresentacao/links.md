@@ -7,6 +7,8 @@
 - [Roteiro e gravação](../docs/roteiro-video.md): 12 slides, meta de 11 minutos, quatro blocos de 2min45s.
 - [Relatório principal](../README.md).
 
+Versão local revisada em **06/10/2026**: início no pré-flop, blinds 5/10, raise, all-in e quatro etapas no exemplo principal. PDF, PPTX, notas de fala e diagramas correspondem a esse recorte.
+
 ## Publicação e entrega
 
 O PDF e o PPTX estão preparados localmente. **Não há link externo de publicação confirmado.** O grupo deve disponibilizar o PDF em serviço acessível aos professores e registrar aqui a URL efetiva.

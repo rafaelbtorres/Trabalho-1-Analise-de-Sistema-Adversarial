@@ -4,7 +4,7 @@
 
 Este é o Trabalho 1 da disciplina Engenharia de Software Adversarial, do Grupo 7. A entrega é uma análise de um sistema adversarial, com planejamento e desenho arquitetural para uma implementação posterior no Trabalho 2.
 
-O tema já escolhido é **Poker Adversarial**. O README delimita dois jogadores, uma mão, três rodadas de apostas, fichas virtuais e informações parcialmente ocultas. Preserve esse tema e recorte, salvo orientação posterior do grupo.
+O tema já escolhido é **Poker Adversarial**. O README delimita dois jogadores, uma mão desde o pré-flop com até quatro etapas, raise e all-in, fichas virtuais e informações parcialmente ocultas. O recorte foi ampliado em 06/10/2026 por solicitação do usuário após as sugestões do Elton. Preserve esse tema e recorte, salvo orientação posterior do grupo.
 
 Integrantes: Rafael Barboza Torres, Elton Henrique Lunardi Gimenes, Frederico Marques da Silva Barcelos e Diego Santos de Araujo.
 
@@ -43,6 +43,10 @@ Rubrica: delimitação 15; modelo estático 20; modelo dinâmico 20; superfície
 - Ainda faltam revisão humana, confirmação das contribuições efetivas, gravação dos quatro integrantes, publicação do vídeo, acesso externo aos arquivos e submissão. `apresentacao/links.md` registra essas pendências.
 - Nenhuma publicação, push, submissão ou autoria individual foi fabricada. Antes de continuar, confira o Git e os arquivos atuais.
 
+## Revisão de escopo em 06/10/2026
+
+Pré-flop, raise e all-in foram incorporados por solicitação do usuário. O exemplo principal tem quatro etapas e 11 ações, conserva 220 fichas e termina em A=50/B=170. A matriz no river parte de pote 80 após check de B. O all-in alternativo pode encerrar cedo e não substitui os três ciclos exigidos. Não registrar aprovação humana coletiva apenas por essa revisão assistida.
+
 ## Fotografia da revisão inicial
 
 - O README tem identificação, resumo, escopo e fluxo inicial parcialmente preenchidos. A maior parte das seções seguintes ainda contém campos de modelo.
@@ -71,7 +75,7 @@ O adversarial surge do conflito entre os agentes; o motor não precisa ter uma e
 
 - Não confundir ganhar uma mão com preservar a justiça do sistema. Uma derrota legítima não comprova falha do motor.
 - Não prometer poker completo. Declare as simplificações e o ponto inicial das três rodadas.
-- Manter a exclusão de aumentos e all-in consistente em relatório, dados, diagramas e slides. Se mudar o recorte, ajustar regras, fluxo e exemplos juntos.
+- Manter pré-flop, blinds 5/10, ordem A antes do flop/B depois, raise e all-in consistentes em relatório, dados, diagramas e slides. Raise indica total por etapa e call transfere apenas a diferença. Após all-in pago, devolver excesso e executar runout sem novas apostas. O cenário principal termina em 50/170 (total 220); ramos alternativos em `dados/cenario-all-in.json`.
 - A matriz proposta é uma análise retrospectiva de um cenário fixo, com informação completa para analisar a tabela reduzida. Os agentes da mão dinâmica têm informação parcial. Não apresentar o equilíbrio da tabela como decisão ótima durante a mão nem exigir que a sequência observada termine nele.
 - Não usar “apostar por valor” versus “blefar” como ações livremente intercambiáveis sem explicar a mão e a informação de cada jogador.
 - Payoffs de preferência não são probabilidades nem automaticamente ganhos monetários. Explicar como os resultados geram a ordem de preferência.

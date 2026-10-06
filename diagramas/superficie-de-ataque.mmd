@@ -1,10 +1,10 @@
 flowchart LR
     A["Módulo adversarial<br/>Inspeciona visão, envia ação,<br/>controla sua decisão"] --> V["T1: visão e histórico<br/>Campo privado sem filtro<br/>Falha de P1"]
-    A --> I["T2: entrada de ações<br/>Valor ou vez sem validação<br/>Falha de P2"]
+    A --> I["T2: entrada de ações<br/>Raise mínimo, call ou devolução sem validação<br/>Falha de P2"]
     A --> E["T3: executor<br/>Decisão sem limite<br/>Falha de P3"]
     V --> S["Sigilo e justiça<br/>Risco 9"]
     I --> F["Integridade e fichas<br/>Risco 9"]
     E --> P["Progresso da mão<br/>Risco 6"]
     V -.-> C1["C1: filtrar todas as saídas"]
-    I -.-> C2["C2/C3: validar e aplicar uma vez"]
+    I -.-> C2["C2/C3: validar saldo, raise e devolução<br/>Aplicar uma vez"]
     E -.-> C4["C4: orçamento e ação padrão"]

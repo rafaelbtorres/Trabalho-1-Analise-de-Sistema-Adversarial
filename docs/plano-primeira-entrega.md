@@ -1,6 +1,6 @@
 # Plano de produção da primeira entrega
 
-Este documento organiza o trabalho solicitado em `enunciado/Apresentação de Trabalhos.md`. A modelagem abaixo foi incorporada ao README e aos materiais locais em 05/10/2026. Os exemplos são sintéticos e a revisão humana do grupo permanece pendente. As etapas servem também como critérios para revisar o material antes da gravação.
+Este documento organiza o trabalho solicitado em `enunciado/Apresentação de Trabalhos.md`. A modelagem abaixo foi incorporada ao README e aos materiais locais em 05/10/2026 e revisada em 06/10/2026 para incluir pré-flop, raise e all-in. Os exemplos são sintéticos e a revisão humana do grupo permanece pendente. As etapas servem também como critérios para revisar o material antes da gravação.
 
 ## Estado da produção
 
@@ -27,7 +27,7 @@ O enunciado não fixa duração do vídeo. A meta deste plano é **11 minutos**,
 |---|---|---|
 | `README.md` | Relatório completo nas seções existentes | Sem instruções de preenchimento; análise coerente e pergunta final respondida |
 | `diagramas/contexto.mmd` e `.png` | Agentes, motor, dados e interações | Participantes, fronteiras e informações autorizadas identificados |
-| `diagramas/ciclo-adaptativo.mmd` e `.png` | Três rodadas e dependências entre elas | Ação, resposta, observação, adaptação e custos visíveis |
+| `diagramas/ciclo-adaptativo.mmd` e `.png` | Quatro etapas e dependências entre elas | Ação, resposta, observação, adaptação e custos visíveis |
 | `diagramas/superficie-de-ataque.mmd` e `.png` | Interfaces, componentes, fraquezas e ativos | Os três cenários de ameaça têm pontos localizáveis |
 | `fontes/referencias.md` | Fontes reais e dados sintéticos | Cada fonte usada aparece citada no relatório |
 | `apresentacao/slides.pdf` | Versão final dos slides | Legível, consistente com o README e com link acessível |
@@ -42,14 +42,14 @@ A pasta `apresentacao/` contém os arquivos locais. Não criar links fictícios 
 Preencher README 1 e 2 antes de calcular a matriz. Sugestão de recorte:
 
 - Simulação local com agentes A e B; sem dinheiro real, contas públicas ou conexão com plataformas externas.
-- Uma mão, com três etapas de decisão chamadas flop, turn e river. O estado de preparação, inclusive cartas privadas e pote inicial, é uma entrada sintética previamente definida.
-- Não analisar decisões anteriores ao estado inicial. Explicar que o recorte começa após a preparação da mão.
+- Uma mão desde o pré-flop, sem comunitárias abertas, com blinds de 5/10 e até quatro etapas. A age primeiro no pré-flop e B depois do flop.
 - Agentes observam cartas próprias, cartas públicas, pote, saldos públicos, ações e histórico público. Cartas privadas do adversário ficam ocultas até a revelação final prevista pelas regras.
 - A fronteira proposta é a interface de observação e ação. Agentes não recebem acesso livre ao estado interno, à memória ou aos arquivos do motor. Se o Trabalho 2 executar código externo não confiável, a arquitetura precisará de isolamento de execução adicional; filtrar um objeto não é suficiente para esse cenário.
 - Motor controla ordem de ação, validade, atualização do pote e encerramento.
-- Para reduzir complexidade, propor apostas de 10 ou 20 fichas, estritamente menores que o saldo disponível de cada agente, e excluir aumentos, re-aumentos, all-in e potes paralelos neste recorte. Uma etapa admite no máximo uma aposta seguida de call ou fold. Se nenhum valor for permitido, resta check quando não há aposta pendente. Se o grupo mantiver ações adicionais, especificar seus estados e custos e revisar todos os exemplos.
-- Definir check quando não houver aposta a pagar, bet para iniciar aposta, call para igualar e fold para desistir. Determinar explicitamente o que acontece após fold, duas ações check e aposta seguida de call.
-- Adaptação ocorre dentro da mão com base no histórico disponível. Não afirmar aprendizagem estatística confiável com apenas três observações.
+- Permitir check, bet, call, fold, raise e all-in. Valores inteiros até o saldo, aposta mínima 10 e aumento mínimo igual ao último aumento completo. Raise informa o total na etapa; call paga apenas a diferença. All-in usa todo o saldo e admite valor inferior ao mínimo sem reabrir aumento.
+- Fechar etapa após check/check ou resposta à última agressão, preservando a opção do big blind após call simples no pré-flop. Após all-in pago, devolver excesso não coberto e revelar cartas e mesa restante sem novas decisões de aposta. Com dois agentes, não criar pote paralelo. Em empate com ficha indivisível, atribuí-la a B conforme regra prévia.
+- Conferir também saldo inicial que não cobre blind, all-in parcial, identidade, versão, ação fora da vez e retorno atrasado. As regras completas estão no README 1.1.
+- Adaptação ocorre dentro da mão com base no histórico disponível. Não afirmar aprendizagem estatística confiável com apenas quatro observações.
 
 Ativo principal sugerido: **integridade da mão**, incluindo aplicação das regras e conservação de fichas. Propriedades adicionais: sigilo das cartas privadas e progresso da interação.
 
@@ -61,25 +61,25 @@ Preencher a tabela de atores: objetivo, ações, informação e custo. Formular 
 
 Escolher uma decisão e declarar as condições. O exemplo a seguir é um ponto de partida coerente, não uma análise geral do poker.
 
-Estado hipotético: river, pote de 40 fichas, aposta possível de 20. Se houver revelação, B vence. A matriz é uma **análise retrospectiva de um cenário fixo**, construída com as cartas conhecidas pelo analista. Para analisar dominância e equilíbrio, tratamos a tabela de resultados como o jogo reduzido de informação completa. Durante a mão descrita no modelo dinâmico, os agentes continuam sem conhecer as cartas do outro.
+Estado hipotético: river, após check inicial de B, pote de 80 fichas, aposta possível de 20. Se houver revelação, B vence. A matriz é uma **análise retrospectiva de um cenário fixo**, construída com as cartas conhecidas pelo analista. Para analisar dominância e equilíbrio, tratamos a tabela de resultados como o jogo reduzido de informação completa. Durante a mão descrita no modelo dinâmico, os agentes continuam sem conhecer as cartas do outro.
 
 Essa distinção deve aparecer antes da matriz no relatório: o equilíbrio calculado caracteriza a tabela reduzida, não a decisão ótima dos agentes sob informação parcial. Resolver esta última exigiria especificar crenças sobre mãos possíveis e avaliar seus resultados, algo que não é necessário para este recorte da primeira entrega.
 
 - A1: apostar 20 como blefe.
-- A2: dar check e seguir para revelação, supondo que B também dá check quando não enfrenta aposta.
+- A2: dar check e seguir para revelação, após o check inicial de B fixado como condição da matriz.
 - B1: política de pagar a aposta de A; se A der check, seguir para revelação.
 - B2: política de desistir diante da aposta de A; se A der check, seguir para revelação.
 
-As colunas são políticas condicionais. Portanto, não executar fold ou call quando não existe aposta. Essa convenção permite representar o fluxo sequencial numa matriz estática reduzida. A opção de B apostar após o check de A foi excluída apenas desta matriz; no fluxo geral da mão, B pode iniciar uma aposta após esse check. Não confundir a restrição da análise 2×2 com as regras do motor.
+As colunas são políticas condicionais. Portanto, não executar fold ou call quando não existe aposta. Essa convenção permite representar o fluxo sequencial numa matriz estática reduzida. O check inicial de B é condição fixada da matriz. Raises e all-in ficam fora apenas da tabela 2×2, permanecendo no motor. A2 encerra check/check e as duas políticas de B não criam outra ação nesse ramo. Não confundir a restrição da análise 2×2 com as regras do motor.
 
 Ganhos líquidos **a partir deste ponto de decisão**, excluindo contribuições anteriores já incorporadas ao pote:
 
 | A / política de B | B1: pagar se houver aposta | B2: desistir se houver aposta |
 |---|---:|---:|
-| A1: apostar 20 | (-20, +60) | (+40, 0) |
-| A2: check | (0, +40) | (0, +40) |
+| A1: apostar 20 | (-20, +100) | (+80, 0) |
+| A2: check | (0, +80) | (0, +80) |
 
-Exemplo de cálculo: se B paga, o pote chega a 80. A perde as 20 fichas adicionais; B recebe 80 após investir 20, ganhando 60 a partir deste estado. A soma dos ganhos é 40, o pote já existente no início da decisão.
+Exemplo de cálculo: se B paga, o pote chega a 120. A perde as 20 fichas adicionais; B recebe 120 após investir 20, ganhando 100 a partir deste estado. A soma dos ganhos é 80, o pote já existente no início da decisão.
 
 Convertendo cada jogador para preferências ordinais de 0 a 3:
 
@@ -88,7 +88,7 @@ Convertendo cada jogador para preferências ordinais de 0 a 3:
 | A1 | (0, 3) | (3, 0) |
 | A2 | (1, 2) | (1, 2) |
 
-Para A, ganhar 40 é melhor que ganhar 0, que é melhor que perder 20. Para B, ganhar 60 é melhor que ganhar 40, que é melhor que ganhar 0. Não é preciso usar todos os números da escala para cada jogador.
+Para A, ganhar 80 é melhor que ganhar 0, que é melhor que perder 20. Para B, ganhar 100 é melhor que ganhar 80, que é melhor que ganhar 0. Não é preciso usar todos os números da escala para cada jogador.
 
 Análise incorporada ao README, a conferir na revisão humana:
 
@@ -99,37 +99,32 @@ Análise incorporada ao README, a conferir na revisão humana:
 - (A2, B2) não é equilíbrio: A melhoraria mudando para A1.
 - O resultado de equilíbrio usa ações legais e conserva fichas, mas a matriz não verifica isolamento de informações nem garante justiça por si só. Essas propriedades dependem dos controles da arquitetura. Não implica que pagar seja sempre a melhor decisão quando as cartas são incertas.
 
-No exemplo dinâmico, a combinação observada no river será (A1, B1), fora desse equilíbrio retrospectivo. Isso é intencional: A decide com informação parcial e interpreta incorretamente um sinal de B. A narrativa ilustra uma decisão possível de agentes com heurísticas limitadas, sem afirmar que ambos jogam de forma ótima ou que convergem ao equilíbrio em três rodadas.
+No exemplo dinâmico, após o check inicial de B, a combinação observada no river será (A1, B1), fora desse equilíbrio retrospectivo. Isso é intencional: A decide com informação parcial e interpreta incorretamente um sinal de B. A narrativa ilustra uma decisão possível de agentes com heurísticas limitadas, sem afirmar que ambos jogam de forma ótima ou que convergem ao equilíbrio em quatro etapas.
 
 **Concluída quando:** os quatro resultados têm explicação, as quatro melhores respostas foram conferidas e o relatório e os slides distinguem equilíbrio da tabela retrospectiva de decisões durante a mão.
 
-## Etapa 3 — Três rodadas realmente conectadas
+## Etapa 3 — Quatro etapas realmente conectadas
 
-Exemplo proposto para ligar o modelo dinâmico ao estado da matriz:
+Usar o percurso do README 4.1 e de `dados/cenario.json`, desde o pré-flop. Blinds de 5/10 transformam 110/110 em A=105, B=100, pote=15. Conferir cada evento, distinguindo total de contribuição e valor transferido.
 
-Estado inicial: A e B possuem 100 fichas disponíveis cada um; o pote contém 20 de contribuições anteriores de 10 por jogador. Antes da preparação, cada jogador tinha 110. Total conservado: 220 fichas.
+| Etapa | Ações | Adaptação | Estado ao fechar |
+|---|---|---|---|
+| Pré-flop | A raise para 20 (+15); B call (+10) | A mantém teste pequeno ao ver call; B paga para manter A interessado e prepara raise se A insistir | 90/90, pote 40 |
+| Flop | B check; A bet 10; B raise para 20; A call +10 | A recua após raise; B vê call e muda da aposta por valor no turn para check visando indução | 70/70, pote 80 |
+| Turn | B check; A check | A prepara blefe após ausência de nova aposta; B observa recuo e mantém indução no river | 70/70, pote 80 |
+| River | B check; A bet 20; B call 20 | Revelação corrige leitura de A e confirma blefe neste caso para B | 50/50, pote 120 |
 
-Políticas iniciais ilustrativas: A testa pressão pequena com sua mão fraca. B, com mão forte, normalmente aposta quando recebe check, mas pode mudar para uma linha de indução se observar iniciativa do adversário. São regras heurísticas propostas, não estratégias ótimas demonstradas.
+B vence com trinca de ases e termina em 170; A termina em 50. Total 220. Cartas: A 7♣/2♦, B A♥/A♦, mesa A♠/9♥/4♣/K♣/3♦. Antes de cada abertura, cartas futuras ficam ocultas. As escolhas são heurísticas ilustrativas, sem ótimo demonstrado.
 
-| Rodada | Ação e resposta | O que A observa e muda | O que B observa e muda | Pote e saldos após as ações |
-|---|---|---|---|---|
-| 1 — flop | A aposta 10; B paga 10 | O call de B mostra resistência à pressão pequena. A troca a iniciativa por check na próxima etapa para observar a reação. | A abriu a aposta. B passa da intenção de apostar quando receber check para tentar induzir outra aposta de A, preservando uma aparência de cautela. | Pote 40; A 90; B 90 |
-| 2 — turn | A dá check; B também dá check | A vê o check de B e o interpreta como possível fraqueza; prepara uma pressão de 20 no river. Não tem certeza sobre a mão de B. | B vê A recuar após receber call e executa a política de indução: dá check em vez de iniciar a aposta que sua política anterior escolheria. Planeja pagar uma nova aposta se sua mão continuar forte. | Pote 40; A 90; B 90 |
-| 3 — river | A blefa apostando 20; B paga 20 | A testa a hipótese de fraqueza. O novo call e a revelação mostram que a leitura falhou; uma próxima interação pode motivar menos blefes nesse padrão. | B vê A voltar a apostar após o check e paga com sua mão forte. A revelação confirma um blefe neste caso, sem provar que toda sequência semelhante será blefe. | Antes da revelação: pote 80; A 70; B 70 |
+Registrar internamente observação, política anterior, política atual, ação e custo de cada agente, como em `adaptacoes_privadas`. Não fornecer esse registro ao oponente. O custo de A é expor fichas e errar sinais. B pode perder oportunidade de ganho e oferecer carta gratuita ao trocar aposta por check.
 
-Para tornar a adaptação verificável no Trabalho 2, prever em cada registro de decisão: **observação pública relevante → política anterior → política atual → ação e custo**. Esses registros são internos e não devem entregar cartas ou raciocínio privado ao oponente. O contraste central é: sem a iniciativa observada de A, a política inicial de B apostaria no turn; após observá-la, B escolhe check para tentar induzir ação futura.
+Acrescentar o ramo de blefe all-in pré-flop do README 4.4 e de `dados/cenario-all-in.json`: fold produz 120/100; call produz 0/220 na mesa sintética. No caso desigual, antes dos blinds 110/70, devolver 40 não cobertas e chegar a 40/140, total 180. Não exigir três etapas de apostas desse ramo: após all-in pago não há nova decisão de aposta. O percurso principal atende aos ciclos exigidos.
 
-Na revelação do exemplo, B vence: A termina com 70, B com 150, pote zero. Total: 220. A sugestão de mudança após a terceira rodada é uma hipótese de reação, não uma quarta rodada já executada nem ampliação automática do escopo.
-
-Cartas sintéticas incorporadas: A recebe **7♣ e 2♦**; B recebe **A♥ e A♦**; flop **A♠, 9♥, 4♣**; turn **K♣**; river **3♦**. Não há cartas repetidas. Na revelação, B tem trinca de ases e A não forma par, sequência ou flush. Até a revelação, cada agente vê apenas suas cartas e as comunitárias já abertas. O check de B na segunda etapa é uma decisão de estratégia, não evidência de mão fraca. A classificação foi conferida com as regras citadas e por enumeração das combinações de cinco cartas; o grupo ainda deve compreender e revisar esse resultado.
-
-Descrever custos: A expõe fichas e pode interpretar sinais de forma errada; B paga para continuar e, ao dar check com mão forte, pode perder a oportunidade de receber outra aposta ou permitir que a próxima carta favoreça A. A resposta de B ao blefe tem custo e risco mesmo sendo uma ação legítima. A escalada de 10 para 20 ilustra aumento de pressão; uma corrida armamentista sustentada seria uma possibilidade em interações repetidas, não um fenômeno demonstrado por esta única mão.
-
-**Concluída quando:** cada mudança tem uma observação identificável, as fichas fecham e fica claro que ambos podem adaptar sua estratégia.
+**Concluída quando:** cada mudança tem observação identificável, raises e calls transferem valores corretos, os ramos all-in conservam fichas e diagramas, roteiro e slides correspondem ao README.
 
 ## Etapa 4 — Superfície, ameaças e riscos
 
-Conectar ameaças à mesma arquitetura usada pelas três rodadas. Manter **T1/T2/T3** para ameaças, evitando confusão com as ações A1/A2 da matriz, conforme o README atual.
+Conectar ameaças à mesma arquitetura usada pelas quatro etapas. Manter **T1/T2/T3** para ameaças, evitando confusão com as ações A1/A2 da matriz, conforme o README atual.
 
 **Ambiente e momento da avaliação:** protótipo local hipotético, antes dos controles, com um agente deliberadamente adversarial que controla os dados retornados e o tempo de sua decisão. Cada cenário supõe a existência da fraqueza indicada; não se afirma que ela já existe em código. A mão da etapa 3 é o caminho de ações legais. As ameaças são desvios possíveis nas mesmas chamadas de observação, decisão e validação.
 
@@ -153,7 +148,7 @@ As notas são avaliações didáticas propostas, sem medições. O fato de o sis
 
 Resposta a T1: entregar uma visão filtrada por agente e separar registros públicos de registros internos. Custo para agentes legítimos: um filtro incorreto pode omitir informação pública necessária, além do custo de manter e verificar as regras de acesso. Risco residual: uma segunda saída de dados pode continuar expondo informações privadas. Não atribuir redução numérica do risco sem explicitar novas premissas ou evidência.
 
-Acrescentar uma sequência curta de reação à defesa, distinta das três rodadas de apostas: o agente tenta consultar um campo privado → recebe uma visão que não o contém → procura o mesmo dado no histórico público → encontra um histórico também filtrado → passa a explorar padrões de apostas permitidos ou procura outro canal de exposição. Essa é uma hipótese de adaptação após o redesenho, não uma execução já observada. Os controles devem cobrir visão e histórico para sustentar a sequência proposta.
+Acrescentar uma sequência curta de reação à defesa, distinta das quatro etapas de apostas: o agente tenta consultar um campo privado → recebe uma visão que não o contém → procura o mesmo dado no histórico público → encontra um histórico também filtrado → passa a explorar padrões de apostas permitidos ou procura outro canal de exposição. Essa é uma hipótese de adaptação após o redesenho, não uma execução já observada. Os controles devem cobrir visão e histórico para sustentar a sequência proposta.
 
 Controles complementares: validação central e atualização consistente para T2; orçamento de execução e resposta padrão previamente definida para T3. Proposta de resposta padrão: check quando legal, ou fold quando houver aposta pendente. O executor deve conseguir encerrar a execução que ultrapassou o orçamento; especificar esse mecanismo no desenho do Trabalho 2. Descrever custos, como rejeitar uma ação legítima por erro ou forçar fold de um agente legítimo lento, e a adaptação possível de um adversário que passa a responder logo antes do limite.
 
@@ -174,11 +169,11 @@ Preencher README 6 e 7 com componentes sugeridos:
 | Executor de decisões | Aplicar orçamento de execução e resposta padrão | T3 |
 | Registro de eventos | Permitir auditoria com separação de acesso | Observabilidade sem vazamento |
 
-Critérios verificáveis para o Trabalho 2: executar o cenário de três rodadas; conservar 220 fichas no exemplo; impedir acesso a cartas do outro agente antes da revelação permitida; rejeitar ações inválidas sem alterar o estado; aplicar o limite de execução; registrar a observação que motivou cada decisão.
+Critérios verificáveis para o Trabalho 2: executar o cenário de quatro etapas; conservar 220 fichas no exemplo; impedir acesso a cartas do outro agente antes da revelação permitida; rejeitar ações inválidas sem alterar o estado; aplicar o limite de execução; registrar a observação que motivou cada decisão.
 
 Especificar quais decisões o agente adapta e quais regras do motor permanecem invariantes. Neste recorte, o motor pode ter controles fixos; não prometer mudança automática de regras durante a mão. A adaptação estratégica está nos agentes, e mudanças futuras nos controles são propostas de redesenho.
 
-Nos diagramas: contexto mostra atores e fronteiras; ciclo mostra a cadeia das três rodadas, incluindo a mudança de política de B; superfície mostra T1/T2/T3 nas mesmas interfaces de visão, ação e execução usadas durante a mão. Usar mesmos nomes e IDs no relatório, nos diagramas e nos slides. Exportar PNG, conferir leitura e manter os `.mmd` atualizados.
+Nos diagramas: contexto mostra atores e fronteiras; ciclo mostra a cadeia das quatro etapas, incluindo a mudança de política de B; superfície mostra T1/T2/T3 nas mesmas interfaces de visão, ação e execução usadas durante a mão. Usar mesmos nomes e IDs no relatório, nos diagramas e nos slides. Exportar PNG, conferir leitura e manter os `.mmd` atualizados.
 
 ## Etapa 6 — Evidências e integração do relatório
 
@@ -204,7 +199,7 @@ Esta divisão é uma proposta de organização; não representa contribuição j
 | Integrante | Produção principal sugerida | Revisão cruzada | Fala sugerida |
 |---|---|---|---|
 | Rafael | Recorte, atores, pressupostos e contexto | Coerência da arquitetura | Slides 1–3 |
-| Elton | Matriz, melhores respostas e três rodadas | Conferência de saldos e payoffs | Slides 4–6 |
+| Elton | Matriz, melhores respostas e quatro etapas | Conferência de saldos e payoffs | Slides 4–6 |
 | Frederico | Superfície, ameaças, avaliação e prioridade | Rastreabilidade dos controles | Slides 7–9 |
 | Diego | Resiliência, arquitetura e integração dos slides | Links, referências e checklist | Slides 10–12 |
 

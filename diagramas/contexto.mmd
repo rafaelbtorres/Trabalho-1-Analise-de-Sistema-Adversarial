@@ -1,5 +1,5 @@
 flowchart LR
-    A["Agente A<br/>Objetivo: ganhar fichas"] <-->|Proposta de ação / visão filtrada| M["Motor da mão<br/>Valida, contabiliza e<br/>fornece visões filtradas"]
+    A["Agente A<br/>Objetivo: ganhar fichas"] <-->|Proposta de ação / visão filtrada| M["Motor da mão<br/>Pré-flop até river ou runout<br/>Valida raise/all-in e contabiliza<br/>Fornece visões filtradas"]
     B["Agente B<br/>Objetivo: ganhar fichas"] <-->|Proposta de ação / visão filtrada| M
     M --> R["Registro interno<br/>Auditoria após a mão"]
     R --> O["Operador do grupo<br/>Analisa cenário sintético"]

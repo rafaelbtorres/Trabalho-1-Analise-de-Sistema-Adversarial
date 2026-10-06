@@ -1,0 +1,173 @@
+{
+  "tipo": "cenario_sintetico_manual",
+  "descricao": "Ramos alternativos ao percurso principal; nao sao execucoes de simulador",
+  "referencia_cartas_e_regras": "cenario.json",
+  "ramos": [
+    {
+      "id": "all_in_fold",
+      "antes_blinds": {
+        "A": 110,
+        "B": 110,
+        "pote": 0
+      },
+      "inicial": {
+        "A": 105,
+        "B": 100,
+        "pote": 15
+      },
+      "contribuicoes_etapa_iniciais": {
+        "A": 5,
+        "B": 10
+      },
+      "eventos": [
+        {
+          "agente": "A",
+          "acao": "all_in",
+          "valor": 105,
+          "total_etapa": 110,
+          "apos": {
+            "A": 0,
+            "B": 100,
+            "pote": 120
+          }
+        },
+        {
+          "agente": "B",
+          "acao": "fold",
+          "valor": 0,
+          "total_etapa": 10,
+          "apos": {
+            "A": 0,
+            "B": 100,
+            "pote": 120
+          }
+        }
+      ],
+      "devolucao": 0,
+      "vencedor": "A",
+      "revelacao": false,
+      "final": {
+        "A": 120,
+        "B": 100,
+        "pote": 0
+      },
+      "total_fichas": 220
+    },
+    {
+      "id": "all_in_call",
+      "antes_blinds": {
+        "A": 110,
+        "B": 110,
+        "pote": 0
+      },
+      "inicial": {
+        "A": 105,
+        "B": 100,
+        "pote": 15
+      },
+      "contribuicoes_etapa_iniciais": {
+        "A": 5,
+        "B": 10
+      },
+      "eventos": [
+        {
+          "agente": "A",
+          "acao": "all_in",
+          "valor": 105,
+          "total_etapa": 110,
+          "apos": {
+            "A": 0,
+            "B": 100,
+            "pote": 120
+          }
+        },
+        {
+          "agente": "B",
+          "acao": "call",
+          "valor": 100,
+          "total_etapa": 110,
+          "apos": {
+            "A": 0,
+            "B": 0,
+            "pote": 220
+          }
+        }
+      ],
+      "devolucao": 0,
+      "vencedor": "B",
+      "revelacao": true,
+      "etapas_sem_apostas": [
+        "flop",
+        "turn",
+        "river"
+      ],
+      "final": {
+        "A": 0,
+        "B": 220,
+        "pote": 0
+      },
+      "total_fichas": 220
+    },
+    {
+      "id": "all_in_call_desigual",
+      "antes_blinds": {
+        "A": 110,
+        "B": 70,
+        "pote": 0
+      },
+      "inicial": {
+        "A": 105,
+        "B": 60,
+        "pote": 15
+      },
+      "contribuicoes_etapa_iniciais": {
+        "A": 5,
+        "B": 10
+      },
+      "eventos": [
+        {
+          "agente": "A",
+          "acao": "all_in",
+          "valor": 105,
+          "total_etapa": 110,
+          "apos": {
+            "A": 0,
+            "B": 60,
+            "pote": 120
+          }
+        },
+        {
+          "agente": "B",
+          "acao": "call",
+          "valor": 60,
+          "total_etapa": 70,
+          "apos": {
+            "A": 0,
+            "B": 0,
+            "pote": 180
+          }
+        }
+      ],
+      "devolucao": 40,
+      "devolucao_para": "A",
+      "apos_devolucao": {
+        "A": 40,
+        "B": 0,
+        "pote": 140
+      },
+      "vencedor": "B",
+      "revelacao": true,
+      "etapas_sem_apostas": [
+        "flop",
+        "turn",
+        "river"
+      ],
+      "final": {
+        "A": 40,
+        "B": 140,
+        "pote": 0
+      },
+      "total_fichas": 180
+    }
+  ]
+}

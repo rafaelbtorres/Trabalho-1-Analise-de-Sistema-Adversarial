@@ -14,7 +14,7 @@ Este README é o relatório principal. Os arquivos de [contexto para IAs](AGENTS
 
 ## Resumo do sistema
 
-O Poker Adversarial é uma simulação local de uma mão entre dois agentes de software. Eles disputam fichas virtuais, observam respostas públicas e modificam sua política de decisão. Um motor aplica as regras, contabiliza o pote e fornece a cada agente somente a informação autorizada. A interação começa no flop e percorre turn e river, com três etapas de apostas.
+O Poker Adversarial é uma simulação local de uma mão entre dois agentes de software. Eles disputam fichas virtuais, observam respostas públicas e modificam sua política de decisão. Um motor aplica as regras, contabiliza o pote e fornece a cada agente somente a informação autorizada. A interação começa no pré-flop, antes de qualquer comunitária, e pode percorrer flop, turn e river. Raise e all-in fazem parte das decisões legais.
 
 Os agentes podem blefar e explorar padrões públicos. O motor deve preservar a integridade da mão, o sigilo das cartas privadas e o progresso da execução. Uma derrota legítima não indica falha dessas propriedades.
 
@@ -22,24 +22,27 @@ Os agentes podem blefar e explorar padrões públicos. O motor deve preservar a 
 
 ### 1.1 Interação analisada e regras
 
-Usamos uma variante didática inspirada em Texas Hold'em: duas cartas privadas por agente, cinco comunitárias reveladas em etapas e comparação da melhor combinação de cinco cartas no encerramento. A organização das cartas e etapas se apoia nas regras da [PokerStars](https://www.pokerstars.com/poker/games/texas-holdem/). Os limites de apostas e a ordem fixa abaixo são simplificações próprias do protótipo.
+Usamos uma variante didática de Texas Hold'em No Limit: duas cartas privadas por agente, cinco comunitárias reveladas em etapas e comparação da melhor combinação de cinco cartas. Cartas, etapas, blinds e aumentos se apoiam nas [regras da PokerStars](https://www.pokerstars.com/poker/games/texas-holdem/). Mantemos uma única mão local, fichas inteiras e cenários sintéticos, sem torneio ou dinheiro real.
 
-O estado inicial já contém cartas privadas, três comunitárias do flop, saldos e pote. A preparação anterior é contabilizada, mas suas decisões não integram a análise. A age primeiro em cada etapa.
+**O estado inicial é o pré-flop:** as cartas privadas foram distribuídas, mas nenhuma comunitária está aberta. A ocupa o botão/small blind, deposita 5 e age primeiro no pré-flop. B deposita o big blind de 10 e age primeiro no flop, turn e river. Os blinds contam como contribuições da etapa, não como apostas adicionais a pagar integralmente. No exemplo, cada agente tinha 110 antes dos blinds; a visão inicial contém A=105, B=100 e pote=15.
 
 | Situação | Ações permitidas e resultado |
 |---|---|
-| Não há aposta pendente | Check ou bet de 10 ou 20 fichas. A aposta deve ser estritamente menor que o saldo disponível de ambos. Se nenhum valor for permitido, resta check. |
-| A dá check | B pode dar check ou iniciar uma aposta sob os mesmos limites. Se B aposta, A responde. |
-| Existe aposta pendente | O outro agente escolhe call, transferindo o mesmo valor ao pote, ou fold. Aumentos não são permitidos. |
-| Duas ações check ou bet seguida de call | A etapa termina. Após flop revela-se o turn; após turn, o river. |
-| Fold | O agente restante recebe o pote. Não há revelação obrigatória de suas cartas. A mão termina. |
-| River concluído sem fold | Revelam-se as cartas, compara-se a melhor mão e entrega-se o pote ao vencedor. Em empate, divide-se igualmente. |
+| Sem valor a pagar | Check ou bet de pelo menos 10 fichas, até o saldo disponível. Bet inicia uma aposta quando não há aposta aberta na etapa. |
+| Com valor a pagar | Fold, call ou raise. Call transfere a diferença entre a maior contribuição da etapa e a contribuição própria, limitada pelo saldo. |
+| Raise | Define o **total da contribuição na etapa**, não o valor adicional. O aumento deve ser pelo menos o último aumento completo, inicialmente 10. Contra bet de 10, raise para 20 transfere 20 se o agente ainda não contribuiu; o adversário já contribuiu 10 e paga apenas mais 10. Não há limite fixo de quantidade de raises, mas cada aumento consome fichas finitas. |
+| All-in | Transfere todo o saldo. O motor classifica como bet, call total/parcial ou raise segundo a contribuição acumulada. Um all-in pode ficar abaixo do mínimo porque esgota o saldo. Um aumento incompleto não reabre apostas. Com somente dois agentes, o outro apenas paga ou desiste diante de um all-in que supera sua contribuição. |
+| Pré-flop sem aumento | Se A completar o big blind, B ainda pode dar check ou raise. Igualar os blinds não encerra a etapa antes dessa oportunidade de B. |
+| Fechamento normal da etapa | Ambos deram check, ou a última aposta/aumento foi pago e ambos tiveram oportunidade de agir. As contribuições da etapa são zeradas para a próxima etapa, mas o pote permanece. Abrem-se flop, turn e river na ordem. |
+| All-in pago | Após a resposta pendente, o motor devolve a parte não coberta da contribuição maior. Sem novas decisões de aposta, revela as cartas privadas e abre as comunitárias restantes em ordem até a comparação final. Dois agentes não exigem pote paralelo. |
+| Fold | O agente restante recebe o pote, incluindo suas fichas ainda nele. Não há revelação obrigatória de suas cartas e a mão termina. |
+| River concluído sem fold | Revelam-se as cartas, compara-se a melhor mão e entrega-se o pote ao vencedor. Em empate, divide-se igualmente. Se houver ficha indivisível, ela fica com B, primeiro a agir após o flop, regra fixada antes da mão. |
 
-Há no máximo uma aposta por etapa, sem aumentos, all-in ou potes paralelos. Os valores inteiros e pares mantêm divisível o pote em caso de empate. O motor rejeita ações incompatíveis com a vez, a etapa ou o saldo, sem alterar fichas.
+O saldo nunca fica negativo. Um agente com saldo zero não recebe nova chamada de aposta. Aumentar contra um oponente já all-in não é permitido. O motor rejeita ações incompatíveis com a vez, etapa, saldo ou aumento mínimo sem alterar fichas. Valores devem ser inteiros; não ficam limitados a 10 e 20, usados apenas nos exemplos. Se um saldo inicial não cobre o blind, publica-se o valor efetivamente depositado, mantém-se 10 como referência mínima e resolve-se o all-in após a resposta legal do oponente, devolvendo eventual excesso.
 
-O fluxo é: preparar estado sintético, fornecer visão de A, receber e validar ação, atualizar e fornecer a visão do outro, receber resposta e concluir a etapa ou a mão. Cada atualização pública alimenta a decisão seguinte.
+O fluxo é: preparar cartas e blinds, fornecer visão autorizada, receber e validar ação, atualizar fichas e contribuição da etapa, publicar o evento e chamar o próximo agente. O motor acompanha maior contribuição, valor a pagar, último aumento completo e oportunidade de resposta. Cada atualização pública alimenta a decisão seguinte.
 
-Antes da revelação, a visão contém cartas próprias, comunitárias abertas, saldos, pote, vez, ações legais e histórico público. Não contém cartas futuras, cartas privadas do oponente ou sua justificativa interna.
+Antes da revelação permitida, a visão contém cartas próprias, comunitárias abertas, saldos, pote, posição, vez, contribuições da etapa, valor a pagar, mínimo de aumento, ações legais e histórico público. Não contém cartas futuras, cartas privadas do oponente ou sua justificativa interna. O runout após all-in pago libera as cartas segundo a regra de revelação, sem entregar antecipadamente o baralho inteiro.
 
 ### 1.2 Por que é adversarial?
 
@@ -49,9 +52,9 @@ Uma entrada inválida acidental é erro; enviar deliberadamente aposta ilegal pa
 
 ### 1.3 Escopo para o Trabalho 2
 
-**Incluído:** execução local, dois agentes configuráveis, uma mão com três etapas, dados sintéticos, visões filtradas, validação central, contabilização, encerramento por fold ou revelação, limite de execução e auditoria.
+**Incluído:** execução local, dois agentes configuráveis, uma mão desde o pré-flop com até quatro etapas, raise, all-in, devolução de excesso, dados sintéticos, visões filtradas, validação central, contabilização, encerramento por fold ou revelação, limite de execução e auditoria.
 
-**Excluído:** torneios, dinheiro real, contas, plataforma online, agentes externos arbitrários, aprendizagem estatística, pré-flop estratégico, aumentos, all-in e potes paralelos.
+**Excluído:** torneios, dinheiro real, contas, plataforma online, agentes externos arbitrários, aprendizagem estatística, múltiplas mãos de treino e potes paralelos com três ou mais jogadores.
 
 Os agentes são módulos do próprio protótipo. O motor é a autoridade sobre cartas e fichas. Para controlar uma decisão que não termina, o executor deverá rodar o módulo em processo separado, recebendo apenas a visão serializada. Isso permite encerrar a chamada sem travar o motor, mas não constitui sandbox para código externo não confiável. Essa modalidade exigiria proteção adicional e fica fora do recorte.
 
@@ -61,7 +64,7 @@ Os agentes são módulos do próprio protótipo. O motor é a autoridade sobre c
 
 | Ator | Objetivo | Ações e capacidades | Informação observável | Restrições e custos |
 |---|---|---|---|---|
-| Agente A | Maximizar fichas ao final da mão | Check, bet, call, fold e mudança de política de pressão | Cartas próprias, comunitárias abertas, pote, saldos, vez e ações públicas de B | Saldo finito, apostas limitadas, informação parcial e apostas perdidas |
+| Agente A | Maximizar fichas ao final da mão | Check, bet, call, fold, raise, all-in e mudança de política de pressão | Cartas próprias, comunitárias abertas, pote, saldos, vez e ações públicas de B | Saldo finito, aumento mínimo, informação parcial e apostas perdidas |
 | Agente B | Maximizar fichas ao final da mão | Mesmas ações; mudar de apostar por valor para induzir apostas | Visão autorizada equivalente e ações públicas de A | Pagar para observar, deixar de ganhar por cautela e errar sinais |
 | Motor e executor | Preservar regras, fichas, sigilo e progresso | Preparar, filtrar, validar, atualizar, encerrar chamadas e distribuir pote | Estado completo, ações recebidas e eventos | Não entregar sua visão completa ao agente; controles têm custo e podem falhar |
 | Operadores do grupo | Configurar e analisar cenários | Definir entradas e revisar auditoria após a mão | Visão completa para análise, separada das entradas dos agentes | Não orientar um agente com dados privados do outro durante a decisão |
@@ -91,16 +94,16 @@ Fonte editável: [Mermaid](diagramas/contexto.mmd). Os agentes cruzam a fronteir
 
 ### 3.1 Decisão central e limites
 
-Analisamos retrospectivamente uma decisão no river: pote de 40 e aposta de 20, com as cartas fixadas no exemplo da seção 4. Se houver revelação, B vence. O analista conhece os resultados possíveis e constrói um jogo reduzido de informação completa. Os agentes da interação continuam sem conhecer as cartas do outro.
+Analisamos retrospectivamente uma decisão no river, após o check inicial de B: pote de 80 e aposta de 20, com as cartas fixadas no exemplo da seção 4. Se houver revelação, B vence. O analista conhece os resultados possíveis e constrói um jogo reduzido de informação completa. Os agentes da interação continuam sem conhecer as cartas do outro.
 
 O equilíbrio pertence à tabela. Não determina a decisão ótima sob informação parcial, que exigiria crenças sobre mãos possíveis e outra modelagem. As colunas são políticas condicionais, evitando call ou fold sem aposta:
 
 - **A1:** bet de 20 como blefe.
-- **A2:** check, seguido de check de B e revelação.
+- **A2:** check após o check inicial de B e revelação.
 - **B1:** pagar se A apostar; seguir para revelação após check.
 - **B2:** desistir se A apostar; seguir para revelação após check.
 
-A possibilidade de B apostar após check foi excluída apenas desta matriz 2×2. Continua nas regras gerais. Procurar melhores respostas e seus cruzamentos segue o método apresentado na [aula 2 de Teoria dos Jogos do MIT](https://ocw.mit.edu/courses/17-810-game-theory-spring-2021/mit17_810s21_lec2.pdf).
+O check inicial de B é fixado como condição desta matriz 2×2. Raises e all-in de ambos foram excluídos somente da tabela reduzida, mas continuam nas regras gerais. B1/B2 descrevem a resposta de B ao bet de A; não são ações adicionais depois de check/check. Procurar melhores respostas e seus cruzamentos segue o método apresentado na [aula 2 de Teoria dos Jogos do MIT](https://ocw.mit.edu/courses/17-810-game-theory-spring-2021/mit17_810s21_lec2.pdf).
 
 ### 3.2 Fichas e preferências
 
@@ -108,10 +111,10 @@ O ganho líquido considera este ponto de decisão, excluindo contribuições ant
 
 | A / política de B | B1: pagar se houver aposta | B2: desistir se houver aposta |
 |---|---:|---:|
-| A1: apostar 20 | (-20, +60) | (+40, 0) |
-| A2: check | (0, +40) | (0, +40) |
+| A1: apostar 20 | (-20, +100) | (+80, 0) |
+| A2: check | (0, +80) | (0, +80) |
 
-Com call, o pote chega a 80. B recebe 80 após investir 20, ganhando 60 desse ponto em diante; A perde 20 adicionais. Com fold, A recupera sua aposta e recebe o pote prévio de 40. A soma dos ganhos dessa comparação é 40, recurso já existente no início da decisão. Considerando toda a mão, ganhos relativos ao saldo anterior de 110 são de soma zero.
+Com call, o pote chega a 120. B recebe 120 após investir 20, ganhando 100 desse ponto em diante; A perde 20 adicionais. Com fold, A recupera sua aposta e recebe o pote prévio de 80. A soma dos ganhos dessa comparação é 80, recurso já existente no início da decisão. Considerando toda a mão, ganhos relativos ao saldo anterior de 110 são de soma zero.
 
 Convertendo para preferências ordinais, na ordem **(payoff de A, payoff de B)**:
 
@@ -120,7 +123,7 @@ Convertendo para preferências ordinais, na ordem **(payoff de A, payoff de B)**
 | **A1** | **(0, 3)** | **(3, 0)** |
 | **A2** | **(1, 2)** | **(1, 2)** |
 
-Para A, +40 é melhor que zero, que é melhor que -20. Para B, +60 é melhor que +40, que é melhor que zero. Valores maiores indicam preferência, não probabilidade. Não é necessário usar todos os números da escala para cada jogador.
+Para A, +80 é melhor que zero, que é melhor que -20. Para B, +100 é melhor que +80, que é melhor que zero. Valores maiores indicam preferência, não probabilidade. Não é necessário usar todos os números da escala para cada jogador.
 
 ### 3.3 Resultados, respostas e equilíbrio
 
@@ -148,7 +151,7 @@ Esse resultado usa ações legais e conserva fichas. Justiça e sigilo dependem 
 
 ### 4.1 Dados sintéticos e rodadas
 
-Antes da preparação, cada agente dispõe de 110 fichas e contribui com 10 para o pote. O recorte inicia com A=100, B=100 e pote=20. Total: 220 fichas. As cartas são sintéticas e não se repetem:
+Cada agente dispõe de 110 fichas antes dos blinds. A deposita 5 e B, 10; o pré-flop começa com **A=105, B=100 e pote=15**, sem comunitárias abertas. Total: 220 fichas. As cartas abaixo são sintéticas e não se repetem:
 
 | Elemento | Cartas |
 |---|---|
@@ -158,27 +161,28 @@ Antes da preparação, cada agente dispõe de 110 fichas e contribui com 10 para
 | Turn | K♣ |
 | River | 3♦ |
 
-O analista vê toda a tabela; os agentes recebem apenas as cartas permitidas em cada etapa. A melhor mão de B é A♥, A♦, A♠, K♣, 9♥, trinca de ases. A possui A♠, K♣, 9♥, 7♣, 4♣, carta alta. A classificação favorece B conforme a [hierarquia de mãos](https://www.pokerstars.com/poker/games/rules/hand-rankings/).
+O analista vê toda a tabela; os agentes recebem apenas as cartas permitidas em cada etapa. B começa com par de ases e forma trinca no flop. Na revelação, sua melhor mão é A♥, A♦, A♠, K♣, 9♥. A possui A♠, K♣, 9♥, 7♣, 4♣, carta alta. A classificação segue a [hierarquia de mãos](https://www.pokerstars.com/poker/games/rules/hand-rankings/).
 
-Política inicial de A: testar pressão pequena com mão fraca e ajustar pela resposta. Política inicial de B: apostar com mão forte quando recebe check; após observar iniciativa de A, pode trocar para induzir outra aposta. São heurísticas limitadas, sem demonstração de ótimo ou aprendizagem estatística.
+Política inicial de A: testar pressão pequena com mão fraca e ajustar pela resposta. Política inicial de B: valorizar mão forte com aposta ou raise; ao observar iniciativa de A, pode pagar para mantê-lo interessado ou dar check para induzir aposta. São heurísticas limitadas, sem demonstração de ótimo ou aprendizagem estatística. As comunitárias futuras não entram nessas decisões.
 
-| Rodada | Ação e resposta | Observação e adaptação de A | Observação e adaptação de B | Estado |
+| Rodada | Ação e resposta | Observação e adaptação de A | Observação e adaptação de B | Estado ao fechar a etapa |
 |---|---|---|---|---|
-| 1 - flop | A aposta 10; B paga 10. Motor valida e publica. | Call indica resistência. A planeja check no turn para observar. | A iniciou a aposta. B muda da intenção de apostar diante de check para indução, mantendo A interessado. | A=90, B=90, pote=40 |
-| 2 - turn | A dá check; B dá check. Motor encerra etapa e abre river. | Interpreta check como possível fraqueza e planeja pressão de 20. Leitura incerta. | Executa a mudança: check em vez de apostar. Planeja pagar nova aposta se continuar forte. | A=90, B=90, pote=40 |
-| 3 - river | A blefa 20; B paga 20. Motor conduz à revelação. | Testa sua hipótese. Call e revelação mostram falha; pode reduzir esse blefe numa interação futura. | Observa retomada da pressão e paga. Revelação confirma um blefe neste caso, sem generalizar. | A=70, B=70, pote=80 |
+| 1 - pré-flop | A aumenta para 20, transferindo 15; B paga mais 10. Motor valida e abre o flop. | Vê call sem novo aumento e mantém pressão pequena como teste no flop. O call não revela as cartas de B. | Vê a iniciativa de A e paga, em vez de re-aumentar com seu par forte, para mantê-lo interessado. Se A insistir após o flop e B continuar forte, passa a aumentar por valor. | A=90, B=90, pote=40 |
+| 2 - flop | B dá check; A aposta 10; B aumenta para 20; A paga mais 10. | Observa raise e paga mais 10 para continuar, sem afirmar que é uma decisão ótima. Troca pressão por cautela e planeja check se B não apostar no turn. | Após o check inicial, vê A insistir e aumenta com trinca. O call de A mostra interesse em continuar. Muda da política de apostar com mão forte no turn para check, tentando induzir nova aposta. | A=70, B=70, pote=80 |
+| 3 - turn | B dá check; A dá check. Motor abre o river. | Mantém cautela nesta etapa após o raise do flop. Ao observar ausência de nova aposta de B, interpreta possível fraqueza e prepara blefe de 20 no river. | Executa check no lugar da aposta que sua política anterior escolheria. Observa check de A, mantém a tentativa de indução no river e planeja pagar se A voltar a pressionar e sua mão continuar forte. | A=70, B=70, pote=80 |
+| 4 - river | B dá check; A blefa 20; B paga 20. Motor conduz à revelação. | O check repetido dispara o blefe. Call e revelação mostram que sua leitura falhou; pode reduzir esse blefe numa interação futura. | Mantém check para induzir, vê a retomada da pressão e paga. A revelação confirma um blefe neste caso, sem generalizar. | A=50, B=50, pote=120 |
 
-B recebe 80 no encerramento: **A=70, B=150 e pote=0**. A soma é sempre 220. Os dados estruturados estão em [cenario.json](dados/cenario.json).
+B recebe 120 no encerramento: **A=50, B=170 e pote=0**. A soma é sempre 220. Os [dados estruturados](dados/cenario.json) registram cada transferência, o total da contribuição em raises, os estados esperados e as mudanças privadas de política.
 
-A sequência é uma hipótese manual coerente, não resultado de simulador implementado. No river ocorre (A1, B1), fora do equilíbrio da tabela: A desconhece a mão de B e sua heurística erra a leitura do check.
+A sequência é uma hipótese manual coerente, não resultado de simulador implementado. No river, após o check inicial de B, ocorre (A1, B1), fora do equilíbrio da tabela: A desconhece a mão de B e sua heurística erra a leitura do check. As quatro etapas preservam pelo menos três ciclos conectados de ação, resposta, observação e adaptação.
 
 ### 4.2 Ciclo e custos
 
-![Três rodadas e adaptação dos agentes](diagramas/ciclo-adaptativo.png)
+![Quatro etapas desde o pré-flop e adaptação dos agentes](diagramas/ciclo-adaptativo.png)
 
 Fonte editável: [Mermaid](diagramas/ciclo-adaptativo.mmd).
 
-B explicita adaptação: sem a iniciativa anterior de A, apostaria no turn com mão forte; depois de observá-la, escolhe check para tentar induzir aposta. Seu custo é perder oportunidade de ganho ou permitir que a próxima carta favoreça A. A expõe fichas ao interpretar um sinal ambíguo.
+B explicita adaptação: sem a iniciativa de A e seu call ao raise do flop, apostaria no turn com mão forte; depois de observá-los, escolhe check para tentar induzir aposta. Seu custo é perder oportunidade de ganho ou permitir que a próxima carta favoreça A. A expõe fichas ao interpretar um sinal ambíguo.
 
 No Trabalho 2, cada decisão deverá registrar internamente observação relevante, política anterior, política atual, ação e custo. O oponente não recebe esse registro. Controles técnicos também custam: interromper decisão legítima lenta pode provocar fold automático.
 
@@ -186,9 +190,25 @@ No Trabalho 2, cada decisão deverá registrar internamente observação relevan
 
 - **Quem observa quem?** A e B observam ações públicas mútuas. Motor observa ações e execução. Operadores analisam auditoria após a mão.
 - **O que muda?** A muda pressão e cautela. B muda de aposta por valor para indução. Regras e cartas não mudam por vontade do agente.
-- **O que dispara adaptação?** Call, check, valor, novas comunitárias e revelação. São sinais, não acesso garantido à força privada.
+- **O que dispara adaptação?** Call, check, raise, all-in, valor, novas comunitárias e revelação. São sinais, não acesso garantido à força privada.
 - **Qual é o custo?** Fichas comprometidas, oportunidade perdida, cálculo adicional e leitura errada. Defesa técnica pode interromper agente legítimo.
-- **Onde surge corrida armamentista?** Mais pressão pode levar a mais pagamentos e exposição. A passagem de 10 para 20 é escalada pontual. Corrida sustentada exigiria interações repetidas e não foi demonstrada nesta mão.
+- **Onde surge corrida armamentista?** Mais pressão pode levar a mais pagamentos e exposição. Os aumentos para 20 e a possibilidade de all-in ilustram escalada de pressão. Corrida sustentada exigiria interações repetidas e não foi demonstrada nesta mão.
+
+### 4.4 Cenário alternativo: blefe all-in antes do flop
+
+Este ramo parte do mesmo pré-flop, **A=105, B=100, pote=15**, com contribuições de 5 e 10. A tem 7♣/2♦ e usa all-in como blefe: transfere 105 e chega a contribuição total de 110. B conhece apenas A♥/A♦ e o aumento público, sem conhecer a mesa futura. Uma mão fraca pode pressionar o adversário legitimamente; all-in não cria vantagem indevida nem garante sucesso.
+
+| Resposta hipotética de B | Transição | Resultado |
+|---|---|---|
+| Fold por política de cautela | Depois do all-in: A=0, B=100, pote=120. O motor entrega o pote a A sem exigir suas cartas. | A=120, B=100, pote=0. A ganha 10 em relação às 110 anteriores aos blinds. B aprende o tamanho da pressão, mas não comprova que houve blefe. |
+| Call com par forte | B transfere suas 100 restantes. A=0, B=0, pote=220. Não há novas decisões de aposta. O motor revela as cartas e abre flop, turn e river. | Na mesa sintética, B vence com trinca: A=0, B=220, pote=0. A observa a resistência e perde todo o saldo; B confirma o blefe pela revelação. |
+
+São respostas contrastantes de políticas hipotéticas; não afirmamos que B deveria desistir com ases. Uma política mais agressiva de B também pode escolher all-in com mão forte, sob a mesma validação. A força privada altera a escolha do agente, enquanto as regras do motor permanecem iguais.
+
+**Saldos diferentes:** se A tinha 110 e B, 70 antes dos blinds, o início é A=105, B=60, pote=15, total 180. A transfere 105 e B paga suas 60 restantes. O pote chega a 180, mas A contribuiu 110 e B, 70: o motor devolve 40 a A antes da comparação. O pote disputado fica em 140; com a mesma mesa, o final é A=40, B=140, pote=0. Essas 40 fichas não são prêmio nem pote paralelo: eram parcela não coberta. Os ramos estão em [cenario-all-in.json](dados/cenario-all-in.json).
+
+O all-in pré-flop pago encerra decisões de aposta cedo. Por isso, ele complementa o exemplo principal de quatro etapas e não substitui os três ciclos de adaptação exigidos. Sua consequência estratégica só pode alterar uma interação futura, pois a mão atual já não admite nova aposta.
+
 
 ## 5. Ameaças e riscos
 
@@ -215,7 +235,7 @@ P é a probabilidade qualitativa de sucesso da tentativa **se a fraqueza existir
 | ID | Cenário de ameaça | Ponto e fraqueza | Ativo | P e justificativa | I e justificativa | Risco |
 |---|---|---|---|---|---|---:|
 | T1 | Um agente pode ler cartas do oponente pela visão ou histórico, aproveitando filtro ausente, obtendo vantagem indevida sobre a justiça da mão. | Provedor de visões/histórico; falha de P1 | Sigilo e justiça | 3: basta ler campo já entregue | 3: informação proibida muda decisões e não pode ser esquecida | 9 |
-| T2 | Um agente pode enviar aposta maior que seu saldo ou ação fora da vez pela entrada de ações, aproveitando validação ausente, causando contabilização ou transição ilegal. | Validador/motor; falha de P2 | Integridade e fichas | 3: basta enviar ação sem conferência correspondente | 3: resultado desrespeita regras e saldos | 9 |
+| T2 | Um agente pode enviar aposta maior que seu saldo, ação fora da vez ou raise abaixo do mínimo sem esgotar saldo pela entrada de ações, aproveitando validação ausente, causando contabilização ou transição ilegal. | Validador/motor; falha de P2 | Integridade e fichas | 3: basta enviar ação sem conferência correspondente | 3: resultado desrespeita regras e saldos | 9 |
 | T3 | Um agente pode nunca retornar pela chamada de decisão, aproveitando orçamento ausente, bloqueando o progresso da mão. | Executor; falha de P3 | Progresso | 3: chamada sem limite fica bloqueada diretamente | 2: exige interrupção/reinício sem necessariamente alterar saldo ou sigilo | 6 |
 
 Os valores devem ser revistos com evidências da implementação. T1 e T2 empatam e ambas exigem controles antes do uso.
@@ -230,7 +250,7 @@ A resposta é fornecer visão específica por agente e filtrar histórico públi
 2. Percebe campo indisponível e procura o dado no histórico.
 3. Encontra histórico filtrado e passa a inferir padrões permitidos ou procurar outro canal.
 
-Essa adaptação após redesenho é hipotética, distinta das três etapas de apostas e sem alegação de teste realizado. Inferência por ações públicas permanece legítima. O risco residual é uma saída secundária, exceção ou registro que exponha dados.
+Essa adaptação após redesenho é hipotética, distinta das quatro etapas de apostas e sem alegação de teste realizado. Inferência por ações públicas permanece legítima. O risco residual é uma saída secundária, exceção ou registro que exponha dados.
 
 Filtro incorreto pode omitir informação pública e prejudicar agente legítimo. Desenvolver e conferir autorizações tem custo. Não atribuímos redução numérica ao risco após defesa sem evidências. Monitoramos ausência de cartas proibidas em todas as saídas, preservando dados públicos necessários.
 
@@ -244,7 +264,7 @@ Filtro incorreto pode omitir informação pública e prejudicar agente legítimo
 | C4: orçamento, término e ação padrão | T3 | Ausência de resposta não bloqueia indefinidamente; timeout é observável | Retorna perto do limite | Pode interromper agente legítimo lento; consome recursos até o limite |
 | C5: auditoria e invariantes | T1/T2/T3 | Permite detectar violação e reconstruir sequência | Procura evento não coberto | Registros custam recursos e podem vazar se publicados indevidamente |
 
-O validador deverá conferir tipo, valor permitido e significado da ação para o estado, em linha com a validação sintática e semântica da [OWASP](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html). Eventos deverão registrar ator, ação, etapa, versão e resultado, com separação entre informação pública e privada, conforme orientação de [registros de aplicação](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html).
+O validador deverá conferir tipo, valor inteiro, diferença a pagar, contribuição total, aumento mínimo e significado da ação para o estado, em linha com a validação sintática e semântica da [OWASP](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html). Eventos deverão registrar ator, ação, etapa, versão e resultado, com separação entre informação pública e privada, conforme orientação de [registros de aplicação](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html).
 
 Para timeout, a ação padrão é check quando legal ou fold quando há aposta pendente. O executor encerra o processo antes de aplicar a resposta e rejeita retorno atrasado. Se detectar violação de invariantes, o motor interrompe a mão para análise, sem declarar vencedor a partir de estado inconsistente.
 
@@ -257,52 +277,59 @@ A resiliência depende de aplicar regras e propriedades mesmo quando o adversár
 | Componente | Responsabilidade | Entradas | Saídas | Relação |
 |---|---|---|---|---|
 | Preparador/comparador | Validar cenário e melhor mão | Cartas e saldos sintéticos | Estado válido e resultado | P4, integridade |
-| Motor e estado | Etapas, vez, versão, fichas e encerramento | Ação validada e estado anterior | Novo estado e evento | T2 |
+| Motor e estado | Etapas, vez, versão, contribuições, fichas, devolução e encerramento | Ação validada e estado anterior | Novo estado e evento | T2 |
 | Provedor de visões | Serializar dados autorizados | Estado interno e identidade | Visão própria e dados públicos | T1 |
 | Agentes A/B | Escolher ação e adaptar política | Visão e memória autorizadas | Ação e registro privado | Estratégia, T2/T3 |
-| Validador | Conferir ação, valor, vez e versão | Mensagem e estado | Aceitação única ou rejeição | T2 |
+| Validador | Conferir ação, total de raise, saldo, aumento mínimo, vez e versão | Mensagem e estado | Aceitação única ou rejeição | T2 |
 | Executor | Rodar módulo em processo sob orçamento | Visão e configuração | Ação para inspeção ou timeout | T3 |
 | Registro/verificador | Separar histórico e conferir invariantes | Eventos e decisões | Histórico filtrado e auditoria | T1/T2/T3 |
 
-A mensagem contém agente, etapa, versão do estado, tipo de ação e valor somente em bet/call. O motor fixa a identidade e não permite troca pelo módulo. Resposta repetida, atrasada ou de outra versão é rejeitada. Rejeições não mudam fichas; novas tentativas compartilham o orçamento daquela decisão para evitar laço infinito.
+A mensagem contém agente, etapa, versão do estado, tipo de ação e `total_etapa` somente em bet/raise. O motor calcula a transferência como total pretendido menos contribuição própria. Em call, calcula a diferença limitada ao saldo; em all-in, usa todo o saldo. O evento registra separadamente valor transferido, contribuição total, classificação do all-in e eventual devolução. O estado guarda posição, contribuições da etapa, maior contribuição, último aumento completo, jogadores que ainda precisam responder e indicadores de all-in. O motor fixa a identidade e não permite troca pelo módulo. Resposta repetida, atrasada ou de outra versão é rejeitada. Rejeições não mudam fichas; novas tentativas compartilham o orçamento daquela decisão para evitar laço infinito.
 
 Memória do agente contém somente sua visão anterior e inferências. Justificativas pertencem à auditoria e não ao histórico público.
 
 ### 7.2 Fluxo e estados
 
-PREPARACAO valida dados. FLOP, TURN e RIVER alternam vez e resposta conforme a seção 1. Cada ação validada incrementa versão, atualiza fichas uma única vez e registra evento. Check/check ou bet/call fecha a etapa. Fold leva a ENCERRADA. River concluído leva a REVELACAO e depois ENCERRADA. Inconsistência leva a INTERROMPIDA, sem resultado competitivo confirmado.
+PREPARACAO valida cartas, saldos e blinds e abre PRE_FLOP sem comunitárias. A age primeiro no pré-flop e B em FLOP, TURN e RIVER. Cada ação validada incrementa a versão e atualiza fichas e contribuições uma única vez. Raise troca a vez e exige nova resposta; não encerra a etapa. Call fecha a etapa somente depois de satisfeitas as oportunidades de ação, inclusive a opção do big blind no pré-flop sem aumento. Duplo check fecha a etapa quando legal.
 
-A implementação pode começar por terminal e relatório de eventos. Interface gráfica, linguagem e biblioteca não são exigidas nesta entrega. [cenario.json](dados/cenario.json) define cartas, ações ilustrativas e estados esperados.
+Fold leva a ENCERRADA com entrega do pote. All-in pendente exige resposta antes de qualquer revelação. Após pagamento, o motor devolve excesso não coberto e entra em RUNOUT: revela cartas privadas e abre comunitárias restantes, sem chamar decisões de aposta. River concluído ou runout completo leva a REVELACAO e ENCERRADA. Inconsistência leva a INTERROMPIDA, sem vencedor confirmado.
+
+A implementação pode começar por terminal e relatório de eventos. Interface gráfica, linguagem e biblioteca não são exigidas nesta entrega. [cenario.json](dados/cenario.json) define o percurso principal; [cenario-all-in.json](dados/cenario-all-in.json), os ramos de encerramento antecipado e saldos diferentes.
 
 ### 7.3 Critérios de sucesso
 
-1. Executar três etapas e obter saldos 70/150 com pote zero no exemplo.
+1. Executar pré-flop, flop, turn e river e obter saldos 50/170 com pote zero no exemplo principal.
 2. Conservar 220 fichas após cada ação, sem saldo negativo.
 3. Não expor cartas adversárias/futuras em visões e históricos antes da revelação permitida.
-4. Rejeitar ação fora da vez, valor fora do conjunto ou saldo insuficiente, sem alterar fichas.
+4. Rejeitar ação fora da vez, valor não inteiro, raise abaixo do mínimo sem esgotar saldo, aposta maior que o saldo ou aumento contra oponente all-in, sem alterar fichas.
 5. Aplicar cada ação uma única vez e rejeitar versões antigas/retornos atrasados.
 6. Interromper decisão sem retorno dentro do orçamento e aplicar ação padrão legal.
 7. Registrar mudança de política dos dois agentes sem expor raciocínio privado ao outro.
 8. Encerrar por fold, showdown, empate ou interrupção conforme os estados definidos.
+9. Distinguir total de raise e transferência: no flop, B aumenta para 20 e A paga apenas mais 10.
+10. Resolver os ramos all-in: 120/100 por fold, 0/220 por call e 40/140 com devolução de 40 no caso desigual de total 180.
+11. Não chamar agentes com saldo zero, não permitir novas apostas após all-in pago e preservar a opção do big blind após call simples no pré-flop.
+12. Aceitar all-in inferior ao mínimo quando esgota saldo, sem reabrir aumento, e aplicar a regra de empate/ficha indivisível.
 
 São especificações para o Trabalho 2, não testes já executados de um motor funcional.
 
 ## 8. Referências
 
-Fontes consultadas em 05/10/2026; metadados e rastreabilidade estão em [fontes/referencias.md](fontes/referencias.md):
+Fontes consultadas em 05/10/2026, com regras de poker reconferidas em 06/10/2026; metadados e rastreabilidade estão em [fontes/referencias.md](fontes/referencias.md):
 
-1. [PokerStars - Texas Hold'em](https://www.pokerstars.com/poker/games/texas-holdem/): estrutura de cartas e etapas.
+1. [PokerStars - Texas Hold'em](https://www.pokerstars.com/poker/games/texas-holdem/): cartas, etapas, blinds e regras de No Limit.
 2. [PokerStars - Poker Hand Rankings](https://www.pokerstars.com/poker/games/rules/hand-rankings/): classificação das mãos.
 3. [MIT OpenCourseWare - Games in Strategic Form and Nash Equilibrium, aula 2, 2021](https://ocw.mit.edu/courses/17-810-game-theory-spring-2021/mit17_810s21_lec2.pdf): melhores respostas e equilíbrio.
 4. [OWASP - Threat Modeling Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html): desenho, ameaças e respostas.
 5. [OWASP - Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html): conferência de ações.
 6. [OWASP - Logging Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html): eventos e proteção de dados.
+7. [PokerStars - Poker terms and rules explained](https://www.pokerstars.com/help/articles/poker-rules-master/229168/): ordem heads-up, aumento mínimo e condições de potes paralelos.
 
 O [enunciado](enunciado/Apresenta%C3%A7%C3%A3o%20de%20Trabalhos.md) define entregáveis e escala. A [transcrição](enunciado/trancricao_video_enunciado.md) complementa a interpretação. Apostas, cartas, políticas, payoffs e riscos são decisões do cenário didático, não resultados atribuídos às fontes.
 
 ## 9. Declaração de IA generativa
 
-O Codex foi usado para analisar o enunciado e a base, preparar contexto, plano e roteiro, redigir este relatório, buscar fontes, organizar dados sintéticos, produzir diagramas e slides e conferir coerência entre materiais. A verificação automatizada abrange fichas, respostas da matriz, classificação das cartas, riscos, duração planejada e estrutura de arquivos. Isso não equivale a testar o sistema futuro.
+O Codex foi usado para analisar o enunciado e a base, preparar contexto, plano e roteiro, redigir este relatório, buscar fontes, organizar dados sintéticos, produzir diagramas e slides e conferir coerência entre materiais. A verificação automatizada abrange fichas, respostas da matriz, classificação das cartas, riscos, duração planejada e estrutura de arquivos. A revisão de 06/10/2026 incorporou pré-flop, blinds, raise, all-in e seus ramos, com nova conferência das transições e artefatos. Isso não equivale a testar o sistema futuro.
 
 A revisão humana e o domínio das decisões pelos quatro integrantes ainda precisam ocorrer antes da submissão. O grupo deve registrar as verificações que efetivamente fizer, corrigir erros e assumir a versão apresentada. IA não substitui contribuições humanas nem apresentação pelos integrantes.
 
@@ -324,7 +351,7 @@ A divisão é proposta, não declaração de trabalho concluído. Todos devem re
 - [x] Interação e regras delimitadas.
 - [x] Atores, ativos, capacidades, dados, custos e pressupostos descritos.
 - [x] Matriz, contas, respostas, dominância e equilíbrio analisados.
-- [x] Três rodadas e adaptação dos dois agentes.
+- [x] Quatro etapas desde o pré-flop, raises, all-in alternativo e adaptação dos dois agentes.
 - [x] Três diagramas com fontes editáveis.
 - [x] Três ameaças, riscos 9/9/6 e desempate.
 - [x] Controles, próxima reação, custos e risco residual.
@@ -339,6 +366,8 @@ A divisão é proposta, não declaração de trabalho concluído. Todos devem re
 
 **Depois que o sistema responder, o que o outro lado aprenderá e tentará fazer em seguida?**
 
-A aprende que call resiste à pressão e pode interpretar check como fraqueza. B observa iniciativa e pode usar check para induzir aposta. A revelação corrige a hipótese de A neste caso, sem produzir conhecimento universal sobre o oponente.
+A aprende que call e raise resistem à pressão e pode interpretar check como fraqueza. B observa iniciativa e pode usar check para induzir aposta. A revelação corrige a hipótese de A neste caso, sem produzir conhecimento universal sobre o oponente.
+
+No all-in pré-flop, fold revela a desistência, mas não confirma o blefe. Call seguido da revelação permite observar as cartas e o resultado; a adaptação só vale para uma interação futura, pois não há nova decisão de aposta nessa mão.
 
 Após defesa técnica, o agente aprende quais campos e ações são permitidos. Pode buscar informação pelo histórico, testar limites ou retornar perto do orçamento. O motor deve continuar filtrando saídas, validando ações e preservando fichas e progresso. Inferência legítima permanece no jogo; exposição indevida, adulteração e bloqueio exigem controles e revisão.

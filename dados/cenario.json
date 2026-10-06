@@ -1,26 +1,371 @@
 {
   "tipo": "cenario_sintetico_manual",
   "descricao": "Sequencia ilustrativa, nao resultado de simulador implementado",
-  "regras": {"primeiro_agente": "A", "apostas": [10, 20], "max_apostas_por_etapa": 1, "aumentos": false, "all_in": false},
-  "cartas_privadas": {"A": ["7c", "2d"], "B": ["Ah", "Ad"]},
-  "comunitarias": {"flop": ["As", "9h", "4c"], "turn": "Kc", "river": "3d"},
-  "convencao_naipes": {"c": "paus", "d": "ouros", "h": "copas", "s": "espadas"},
-  "antes_preparacao": {"A": 110, "B": 110, "pote": 0},
-  "contribuicoes_iniciais": {"A": 10, "B": 10},
-  "inicial": {"A": 100, "B": 100, "pote": 20},
+  "regras": {
+    "small_blind": 5,
+    "big_blind": 10,
+    "primeiro_pre_flop": "A",
+    "primeiro_pos_flop": "B",
+    "aposta_minima": 10,
+    "valores": "inteiros_ate_saldo",
+    "aumentos": true,
+    "all_in": true,
+    "max_raises_por_etapa": null,
+    "potes_paralelos": false,
+    "ficha_indivisivel": "B"
+  },
+  "cartas_privadas": {
+    "A": [
+      "7c",
+      "2d"
+    ],
+    "B": [
+      "Ah",
+      "Ad"
+    ]
+  },
+  "comunitarias": {
+    "flop": [
+      "As",
+      "9h",
+      "4c"
+    ],
+    "turn": "Kc",
+    "river": "3d"
+  },
+  "convencao_naipes": {
+    "c": "paus",
+    "d": "ouros",
+    "h": "copas",
+    "s": "espadas"
+  },
+  "antes_preparacao": {
+    "A": 110,
+    "B": 110,
+    "pote": 0
+  },
+  "inicial": {
+    "A": 105,
+    "B": 100,
+    "pote": 15
+  },
   "eventos": [
-    {"etapa": "flop", "agente": "A", "acao": "bet", "valor": 10, "apos": {"A": 90, "B": 100, "pote": 30}},
-    {"etapa": "flop", "agente": "B", "acao": "call", "valor": 10, "apos": {"A": 90, "B": 90, "pote": 40}},
-    {"etapa": "turn", "agente": "A", "acao": "check", "valor": 0, "apos": {"A": 90, "B": 90, "pote": 40}},
-    {"etapa": "turn", "agente": "B", "acao": "check", "valor": 0, "apos": {"A": 90, "B": 90, "pote": 40}},
-    {"etapa": "river", "agente": "A", "acao": "bet", "valor": 20, "apos": {"A": 70, "B": 90, "pote": 60}},
-    {"etapa": "river", "agente": "B", "acao": "call", "valor": 20, "apos": {"A": 70, "B": 70, "pote": 80}}
+    {
+      "etapa": "pre_flop",
+      "agente": "A",
+      "acao": "raise",
+      "valor": 15,
+      "total_etapa": 20,
+      "apos": {
+        "A": 90,
+        "B": 100,
+        "pote": 30
+      }
+    },
+    {
+      "etapa": "pre_flop",
+      "agente": "B",
+      "acao": "call",
+      "valor": 10,
+      "total_etapa": 20,
+      "apos": {
+        "A": 90,
+        "B": 90,
+        "pote": 40
+      }
+    },
+    {
+      "etapa": "flop",
+      "agente": "B",
+      "acao": "check",
+      "valor": 0,
+      "total_etapa": 0,
+      "apos": {
+        "A": 90,
+        "B": 90,
+        "pote": 40
+      }
+    },
+    {
+      "etapa": "flop",
+      "agente": "A",
+      "acao": "bet",
+      "valor": 10,
+      "total_etapa": 10,
+      "apos": {
+        "A": 80,
+        "B": 90,
+        "pote": 50
+      }
+    },
+    {
+      "etapa": "flop",
+      "agente": "B",
+      "acao": "raise",
+      "valor": 20,
+      "total_etapa": 20,
+      "apos": {
+        "A": 80,
+        "B": 70,
+        "pote": 70
+      }
+    },
+    {
+      "etapa": "flop",
+      "agente": "A",
+      "acao": "call",
+      "valor": 10,
+      "total_etapa": 20,
+      "apos": {
+        "A": 70,
+        "B": 70,
+        "pote": 80
+      }
+    },
+    {
+      "etapa": "turn",
+      "agente": "B",
+      "acao": "check",
+      "valor": 0,
+      "total_etapa": 0,
+      "apos": {
+        "A": 70,
+        "B": 70,
+        "pote": 80
+      }
+    },
+    {
+      "etapa": "turn",
+      "agente": "A",
+      "acao": "check",
+      "valor": 0,
+      "total_etapa": 0,
+      "apos": {
+        "A": 70,
+        "B": 70,
+        "pote": 80
+      }
+    },
+    {
+      "etapa": "river",
+      "agente": "B",
+      "acao": "check",
+      "valor": 0,
+      "total_etapa": 0,
+      "apos": {
+        "A": 70,
+        "B": 70,
+        "pote": 80
+      }
+    },
+    {
+      "etapa": "river",
+      "agente": "A",
+      "acao": "bet",
+      "valor": 20,
+      "total_etapa": 20,
+      "apos": {
+        "A": 50,
+        "B": 70,
+        "pote": 100
+      }
+    },
+    {
+      "etapa": "river",
+      "agente": "B",
+      "acao": "call",
+      "valor": 20,
+      "total_etapa": 20,
+      "apos": {
+        "A": 50,
+        "B": 50,
+        "pote": 120
+      }
+    }
   ],
-  "revelacao": {"vencedor": "B", "mao_A": ["As", "Kc", "9h", "7c", "4c"], "mao_B": ["Ah", "Ad", "As", "Kc", "9h"]},
-  "final": {"A": 70, "B": 150, "pote": 0},
+  "revelacao": {
+    "vencedor": "B",
+    "mao_A": [
+      "As",
+      "Kc",
+      "9h",
+      "7c",
+      "4c"
+    ],
+    "mao_B": [
+      "Ah",
+      "Ad",
+      "As",
+      "Kc",
+      "9h"
+    ]
+  },
+  "final": {
+    "A": 50,
+    "B": 170,
+    "pote": 0
+  },
   "total_fichas": 220,
-  "matriz_preferencias": [[[0, 3], [3, 0]], [[1, 2], [1, 2]]],
-  "equilibrio_puro": {"acao_A": "A2", "politica_B": "B1"},
-  "riscos_condicionais_antes_controles": {"T1": {"P": 3, "I": 3, "risco": 9}, "T2": {"P": 3, "I": 3, "risco": 9}, "T3": {"P": 3, "I": 2, "risco": 6}},
-  "duracoes_slides_segundos": [40, 55, 70, 55, 50, 60, 45, 60, 60, 55, 55, 55]
+  "matriz_preferencias": [
+    [
+      [
+        0,
+        3
+      ],
+      [
+        3,
+        0
+      ]
+    ],
+    [
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        2
+      ]
+    ]
+  ],
+  "equilibrio_puro": {
+    "acao_A": "A2",
+    "politica_B": "B1"
+  },
+  "riscos_condicionais_antes_controles": {
+    "T1": {
+      "P": 3,
+      "I": 3,
+      "risco": 9
+    },
+    "T2": {
+      "P": 3,
+      "I": 3,
+      "risco": 9
+    },
+    "T3": {
+      "P": 3,
+      "I": 2,
+      "risco": 6
+    }
+  },
+  "duracoes_slides_segundos": [
+    40,
+    55,
+    70,
+    55,
+    50,
+    60,
+    45,
+    60,
+    60,
+    55,
+    55,
+    55
+  ],
+  "blinds": {
+    "A": 5,
+    "B": 10
+  },
+  "contribuicoes_etapa_iniciais": {
+    "A": 5,
+    "B": 10
+  },
+  "comunitarias_abertas_inicial": [],
+  "matriz_ganhos_do_ponto_de_decisao": [
+    [
+      [
+        -20,
+        100
+      ],
+      [
+        80,
+        0
+      ]
+    ],
+    [
+      [
+        0,
+        80
+      ],
+      [
+        0,
+        80
+      ]
+    ]
+  ],
+  "estado_matriz": {
+    "etapa": "river",
+    "apos_check_de": "B",
+    "A": 70,
+    "B": 70,
+    "pote": 80,
+    "aposta": 20
+  },
+  "adaptacoes_privadas": [
+    {
+      "etapa": "pre_flop",
+      "agente": "A",
+      "observacao": "B paga sem re-aumentar",
+      "politica_anterior": "pressao com mao fraca",
+      "politica_atual": "manter teste pequeno no flop",
+      "custo": "15 transferidas no raise"
+    },
+    {
+      "etapa": "pre_flop",
+      "agente": "B",
+      "observacao": "A aumenta para 20",
+      "politica_anterior": "re-aumentar com par forte",
+      "politica_atual": "pagar para manter A interessado; aumentar se A insistir e a mao continuar forte",
+      "custo": "10 transferidas e oportunidade de re-raise perdida"
+    },
+    {
+      "etapa": "flop",
+      "agente": "A",
+      "observacao": "B aumenta para 20",
+      "politica_anterior": "pressao pequena",
+      "politica_atual": "pagar mais 10 e observar; check no turn se B nao apostar",
+      "custo": "20 transferidas na etapa"
+    },
+    {
+      "etapa": "flop",
+      "agente": "B",
+      "observacao": "A insiste e paga raise",
+      "politica_anterior": "apostar com mao forte no turn",
+      "politica_atual": "check para induzir nova aposta",
+      "custo": "20 transferidas; oportunidade futura de aposta perdida"
+    },
+    {
+      "etapa": "turn",
+      "agente": "A",
+      "observacao": "B da check apos raise do flop",
+      "politica_anterior": "cautela apos raise",
+      "politica_atual": "check agora; preparar blefe 20 no river",
+      "custo": "leitura incerta e oportunidade de aposta perdida"
+    },
+    {
+      "etapa": "turn",
+      "agente": "B",
+      "observacao": "A da check",
+      "politica_anterior": "check para induzir",
+      "politica_atual": "manter inducao no river e pagar se continuar forte",
+      "custo": "carta gratuita e oportunidade perdida"
+    },
+    {
+      "etapa": "river",
+      "agente": "A",
+      "observacao": "check repetido, call e revelacao",
+      "politica_anterior": "blefar 20 diante de novo check",
+      "politica_atual": "rever esse blefe em interacao futura",
+      "custo": "20 perdidas nesta etapa"
+    },
+    {
+      "etapa": "river",
+      "agente": "B",
+      "observacao": "A retoma aposta e revela mao fraca",
+      "politica_anterior": "induzir e pagar com mao forte",
+      "politica_atual": "considerar padrao sem generalizar em interacao futura",
+      "custo": "20 comprometidas antes da revelacao"
+    }
+  ]
 }
