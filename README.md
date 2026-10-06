@@ -19,7 +19,7 @@
 | Apresentação em slides | [PDF](apresentacao/slides.pdf) · [PPTX editável](apresentacao/slides.pptx) |
 | Diagramas | Imagens nas seções 2.4, 4.2 e 5.1; arquivos Mermaid junto de cada imagem e [fonte visual editável em PPTX](diagramas/diagramas-editaveis.pptx) |
 | Referências completas | [Referências e rastreabilidade](fontes/referencias.md) |
-| Link do vídeo no YouTube | | [Vídeo YouTube]([https://www.pokerstars.com/poker/games/rules/hand-rankings/](https://youtu.be/EUSP9QfMzbk)) |
+| Link do vídeo no YouTube | | [Vídeo YouTube]([https://youtu.be/EUSP9QfMzbk]) |
 
 
 
