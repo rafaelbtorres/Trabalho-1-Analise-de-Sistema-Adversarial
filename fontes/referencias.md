@@ -21,4 +21,4 @@ Fontes acessadas em **05/10/2026** na preparação assistida por IA. R1 foi reco
 
 Cartas, saldos, ações, heurísticas, matriz e riscos são um exemplo didático próprio. [cenario.json](../dados/cenario.json) guarda o percurso principal e os estados esperados. [cenario-all-in.json](../dados/cenario-all-in.json) guarda fold, call e devolução de excesso com saldos diferentes. Não são partidas reais nem saída de um simulador implementado.
 
-As fontes apoiam regras e conceitos, sem provar ótimo estratégico, risco medido ou eficácia dos controles futuros. As escolhas ainda exigem revisão humana.
+As fontes apoiam regras e conceitos, sem provar ótimo estratégico, risco medido ou eficácia dos controles futuros.

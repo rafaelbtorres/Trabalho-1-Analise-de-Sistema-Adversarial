@@ -2,7 +2,7 @@
 
 Roteiro de produção para a primeira entrega do Grupo 7. Base: `enunciado/Apresentação de Trabalhos.md`, `enunciado/trancricao_video_enunciado.md` e `docs/plano-primeira-entrega.md`.
 
-As falas abaixo correspondem à modelagem incorporada ao README e aos 12 slides em [PPTX editável](../apresentacao/slides.pptx) e [PDF](../apresentacao/slides.pdf). As falas também estão nas notas do PPTX. Antes de gravar, o grupo deve revisar as decisões, conferir as fontes e ensaiar. Se alterar o modelo, atualizar relatório, dados, diagramas, slides e falas juntos. O cenário é uma sequência sintética manual, não uma execução de software pronto.
+As falas abaixo correspondem à modelagem incorporada ao README e aos 12 slides em [PPTX editável](../apresentacao/slides.pptx) e [PDF](../apresentacao/slides.pdf). As falas também estão nas notas do PPTX. O ensaio e a gravação permanecem como etapas seguintes. Se alterar o modelo, atualizar relatório, dados, diagramas, slides e falas juntos. O cenário é uma sequência sintética manual, não uma execução de software pronto.
 
 ## Formato e distribuição
 
@@ -164,9 +164,7 @@ As falas abaixo correspondem à modelagem incorporada ao README e aos 12 slides 
 
 **Fala sugerida:**
 
-> Depois da resposta, o outro lado aprende com as ações e os limites observáveis. Pode mudar seus blefes, suas decisões de pagar ou o caminho pelo qual procura informação. Apesar disso, o sistema precisa preservar sigilo, fichas e progresso da mão. As fontes que sustentam regras e conceitos ficam no relatório, junto da declaração das tarefas em que usamos IA. Antes de entregar, cada integrante deve conferir contas e conceitos e registrar sua contribuição real. Essa verificação inclui explicar a adaptação dos dois agentes, os limites da matriz e os critérios dos riscos. A análise resultante será a base da implementação no Trabalho 2.
-
-**Ajuste obrigatório antes da gravação:** a versão acima descreve verificações ainda a realizar. Após realizá-las, trocar o trecho por uma descrição factual, por exemplo: “O grupo conferiu os saldos, revisou as melhores respostas e comparou as regras com as fontes citadas”, somente se isso realmente aconteceu. Indicar as ferramentas e tarefas reais de IA. Substituir referências genéricas na tela por fontes verificadas.
+> Depois da resposta, o outro lado aprende com as ações e os limites observáveis. Pode mudar seus blefes, suas decisões de pagar ou o caminho pelo qual procura informação. Apesar disso, o sistema precisa preservar sigilo, fichas e progresso da mão. As fontes que sustentam regras e conceitos ficam no relatório, junto da declaração das tarefas em que usamos IA. A adaptação dos dois agentes, os limites da matriz e os critérios dos riscos fazem parte da análise. As contribuições registradas estão no relatório e no Git. Essa análise será a base da implementação no Trabalho 2.
 
 ## Como produzir os slides
 

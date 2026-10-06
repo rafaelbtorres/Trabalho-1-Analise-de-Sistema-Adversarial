@@ -1,22 +1,48 @@
-# Trabalho 1 - Poker Adversarial
+# Poker Adversarial
 
-## Identificação e materiais da entrega
+**Trabalho 1 — Análise de um Sistema Adversarial**
 
-- **Disciplina:** Engenharia de Software Adversarial.
-- **Grupo:** Grupo 7.
-- **Prazo informado:** 06/10 às 23h59, conforme o [enunciado](enunciado/Apresenta%C3%A7%C3%A3o%20de%20Trabalhos.md).
-- **Integrantes:** Rafael Barboza Torres (rafaelbarbozarafaelbarboza.aluno@unipampa.edu.br), Elton Henrique Lunardi Gimenes (eltongimenes.aluno@unipampa.edu.br), Frederico Marques da Silva Barcelos (fredericobarcelos.aluno@unipampa.edu.br) e Diego Santos de Araujo (diegoaraujo.aluno@unipampa.edu.br).
-- **Apresentação:** [PDF](apresentacao/slides.pdf) e [PowerPoint editável com notas de fala](apresentacao/slides.pptx).
-- **Diagramas:** imagens nas seções do relatório, fontes Mermaid em `diagramas/` e [fonte visual editável](diagramas/diagramas-editaveis.pptx) usada para exportar os PNGs.
-- **Gravação e publicação:** [roteiro de 11 minutos](docs/roteiro-video.md) e [situação dos links e da submissão](apresentacao/links.md).
+**Disciplina:** Engenharia de Software Adversarial · **Grupo:** 7
 
-Este README é o relatório principal. Os arquivos de [contexto para IAs](AGENTS.md) e [planejamento](docs/plano-primeira-entrega.md) apoiam a manutenção. Os materiais locais estão preparados para revisão humana. A gravação pelos quatro integrantes, a publicação e a comprovação das contribuições individuais ainda dependem do grupo.
+| Integrante | E-mail institucional |
+|---|---|
+| Rafael Barboza Torres | rafaelbarbozarafaelbarboza.aluno@unipampa.edu.br |
+| Elton Henrique Lunardi Gimenes | eltongimenes.aluno@unipampa.edu.br |
+| Frederico Marques da Silva Barcelos | fredericobarcelos.aluno@unipampa.edu.br |
+| Diego Santos de Araujo | diegoaraujo.aluno@unipampa.edu.br |
 
-## Resumo do sistema
+## Materiais da entrega
 
-O Poker Adversarial é uma simulação local de uma mão entre dois agentes de software. Eles disputam fichas virtuais, observam respostas públicas e modificam sua política de decisão. Um motor aplica as regras, contabiliza o pote e fornece a cada agente somente a informação autorizada. A interação começa no pré-flop, antes de qualquer comunitária, e pode percorrer flop, turn e river. Raise e all-in fazem parte das decisões legais.
+| Material | Acesso |
+|---|---|
+| Relatório principal | Este README |
+| Apresentação em slides | [PDF](apresentacao/slides.pdf) · [PPTX editável](apresentacao/slides.pptx) |
+| Diagramas | Imagens nas seções 2.4, 4.2 e 5.1; arquivos Mermaid junto de cada imagem e [fonte visual editável em PPTX](diagramas/diagramas-editaveis.pptx) |
+| Referências completas | [Referências e rastreabilidade](fontes/referencias.md) |
 
-Os agentes podem blefar e explorar padrões públicos. O motor deve preservar a integridade da mão, o sigilo das cartas privadas e o progresso da execução. Uma derrota legítima não indica falha dessas propriedades.
+
+
+## Resumo
+
+Este relatório analisa uma mão de poker entre dois agentes de software que disputam fichas virtuais sob informação parcial. A interação começa no pré-flop e admite check, bet, call, fold, raise e all-in. Um motor de jogo medeia a disputa, aplica as regras e fornece visões autorizadas. O objetivo dos agentes é maximizar o saldo final; as propriedades preservadas pelo sistema são integridade da mão, confidencialidade das cartas e progresso da execução.
+
+A análise combina uma matriz estática 2×2 no river, quatro etapas conectadas de ação, resposta, observação e adaptação, e três cenários de ameaça associados à arquitetura. No jogo reduzido, B possui uma estratégia fracamente dominante e o único equilíbrio em estratégias puras é (A2, B1). No percurso dinâmico, A interpreta incorretamente o check de B e perde o blefe, mantendo-se a conservação das 220 fichas. Vazamento de cartas e aceitação de ações inválidas recebem risco 9; bloqueio da decisão recebe risco 6. O redesenho propõe filtragem de informações, validação central, aplicação única de ações, orçamento de execução e auditoria.
+
+O trabalho apresenta planejamento e desenho arquitetural para a implementação no Trabalho 2. Os cenários são sintéticos e descritos manualmente; não há motor de jogo implementado nem resultados experimentais de eficácia dos controles.
+
+## Sumário
+
+1. [Proposta e delimitação](#1-proposta-e-delimitação)
+2. [Descrição do sistema adversarial](#2-descrição-do-sistema-adversarial)
+3. [Modelo estratégico estático](#3-modelo-estratégico-estático)
+4. [Modelo estratégico dinâmico](#4-modelo-estratégico-dinâmico)
+5. [Ameaças e riscos](#5-ameaças-e-riscos)
+6. [Redesenho e resiliência](#6-redesenho-e-resiliência)
+7. [Arquitetura inicial para o Trabalho 2](#7-arquitetura-inicial-para-o-trabalho-2)
+8. [Conclusão e resposta à pergunta final](#8-conclusão-e-resposta-à-pergunta-final)
+9. [Referências](#9-referências)
+10. [Contribuições individuais](#10-contribuições-individuais)
+11. [Declaração de uso de IA generativa](#11-declaração-de-uso-de-ia-generativa)
 
 ## 1. Proposta e delimitação
 
@@ -313,7 +339,19 @@ A implementação pode começar por terminal e relatório de eventos. Interface 
 
 São especificações para o Trabalho 2, não testes já executados de um motor funcional.
 
-## 8. Referências
+## 8. Conclusão e resposta à pergunta final
+
+O conflito entre os agentes decorre da disputa pelo mesmo recurso e da possibilidade de influenciar decisões por sinais públicos. O modelo estático explica preferências e desvios unilaterais em um cenário fixo; o modelo dinâmico mostra como a informação parcial permite uma trajetória diferente do equilíbrio retrospectivo. A derrota de A resulta de um blefe legal e de uma leitura incorreta, sem caracterizar falha do motor.
+
+**Depois que o sistema responder, o que o outro lado aprenderá e tentará fazer em seguida?**
+
+A aprende que call e raise resistem à pressão e pode interpretar check como fraqueza. B observa iniciativa e usa check para induzir aposta. A revelação corrige a hipótese de A neste caso, sem produzir conhecimento universal sobre o oponente.
+
+No all-in pré-flop, fold revela a desistência, mas não confirma o blefe. Call seguido da revelação permite observar as cartas e o resultado; a adaptação só vale para uma interação futura, pois não há nova decisão de aposta nessa mão.
+
+Após a defesa técnica, o agente aprende quais campos e ações são permitidos. Pode buscar informação pelo histórico, testar limites ou retornar perto do orçamento. O motor precisa continuar filtrando saídas, validando ações e preservando fichas e progresso. Inferência por sinais públicos é parte da estratégia; exposição indevida, adulteração e bloqueio comprometem as propriedades do sistema. A arquitetura e os critérios da seção 7 fornecem a base para verificar essa distinção na implementação do Trabalho 2.
+
+## 9. Referências
 
 Fontes consultadas em 05/10/2026, com regras de poker reconferidas em 06/10/2026; metadados e rastreabilidade estão em [fontes/referencias.md](fontes/referencias.md):
 
@@ -327,47 +365,22 @@ Fontes consultadas em 05/10/2026, com regras de poker reconferidas em 06/10/2026
 
 O [enunciado](enunciado/Apresenta%C3%A7%C3%A3o%20de%20Trabalhos.md) define entregáveis e escala. A [transcrição](enunciado/trancricao_video_enunciado.md) complementa a interpretação. Apostas, cartas, políticas, payoffs e riscos são decisões do cenário didático, não resultados atribuídos às fontes.
 
-## 9. Declaração de IA generativa
-
-O Codex foi usado para analisar o enunciado e a base, preparar contexto, plano e roteiro, redigir este relatório, buscar fontes, organizar dados sintéticos, produzir diagramas e slides e conferir coerência entre materiais. A verificação automatizada abrange fichas, respostas da matriz, classificação das cartas, riscos, duração planejada e estrutura de arquivos. A revisão de 06/10/2026 incorporou pré-flop, blinds, raise, all-in e seus ramos, com nova conferência das transições e artefatos. Isso não equivale a testar o sistema futuro.
-
-A revisão humana e o domínio das decisões pelos quatro integrantes ainda precisam ocorrer antes da submissão. O grupo deve registrar as verificações que efetivamente fizer, corrigir erros e assumir a versão apresentada. IA não substitui contribuições humanas nem apresentação pelos integrantes.
-
 ## 10. Contribuições individuais
 
-O histórico local consultado em 05/10/2026 permite confirmar apenas o abaixo. Ausência de registro local não comprova ausência de trabalho em outro ambiente. A preparação assistida por IA não foi atribuída artificialmente a pessoas nem distribuída por commits com autoria fabricada.
+O histórico local consultado em **06/10/2026** registra as contribuições abaixo. Os hashes identificam commits existentes; atividades planejadas para apresentação não são contadas como trabalho realizado.
 
-| Integrante | Evidência local | Participação planejada para concluir |
+| Integrante | Contribuição registrada | Evidência no Git |
 |---|---|---|
-| Rafael Barboza Torres | 549e76e: esqueleto; bd5171c: identificação, resumo, escopo e fluxo | Revisar recorte e atores; apresentar slides 1 a 3 |
-| Elton Henrique Lunardi Gimenes | 88fef65: primeira revisão | Revisar matriz e rodadas; apresentar slides 4 a 6 |
-| Frederico Marques da Silva Barcelos | Contribuição individual ainda não identificável no histórico local consultado | Revisar riscos, registrar trabalho real; apresentar slides 7 a 9 |
-| Diego Santos de Araujo | Contribuição individual ainda não identificável no histórico local consultado | Revisar arquitetura, registrar trabalho real; apresentar slides 10 a 12 |
+| Rafael Barboza Torres | Estrutura inicial do projeto; identificação, primeira versão do resumo, escopo e fluxo | `549e76e` e `bd5171c`, autoria Rafael B Torres |
+| Elton Henrique Lunardi Gimenes | Revisão da terminologia e das ações dos jogadores na descrição do sistema | `88fef65`, autoria Elton Lunardi |
+| Frederico Marques da Silva Barcelos | Preparação e integração do relatório, cenários, diagramas e apresentação com assistência de IA; incorporação de pré-flop, raise e all-in | `6879aee` e `77152ce`, autoria registrada como `frebarcelos` |
+| Diego Santos de Araujo | Não há contribuição individual identificável no histórico local consultado | Sem commit identificado nesta consulta |
 
-A divisão é proposta, não declaração de trabalho concluído. Todos devem revisar o conjunto, gravar sua parte e registrar contribuições reais no Git.
 
-## 11. Checklist
+## 11. Declaração de uso de IA generativa
 
-- [x] Interação e regras delimitadas.
-- [x] Atores, ativos, capacidades, dados, custos e pressupostos descritos.
-- [x] Matriz, contas, respostas, dominância e equilíbrio analisados.
-- [x] Quatro etapas desde o pré-flop, raises, all-in alternativo e adaptação dos dois agentes.
-- [x] Três diagramas com fontes editáveis.
-- [x] Três ameaças, riscos 9/9/6 e desempate.
-- [x] Controles, próxima reação, custos e risco residual.
-- [x] Arquitetura e critérios para o Trabalho 2.
-- [x] Referências e declaração de IA.
-- [x] Apresentação local em PDF/PPTX e roteiro.
-- [ ] Revisão humana, domínio e contribuições reais de todos confirmados.
-- [ ] Vídeo dos quatro gravado e publicado no YouTube.
-- [ ] Links externos acessíveis e submissão concluída.
+O Codex foi utilizado na análise do enunciado e dos arquivos iniciais, no apoio à modelagem e à redação do relatório, na pesquisa de referências, na organização dos dados sintéticos e na produção dos diagramas, slides e roteiro. Também auxiliou a incorporação de pré-flop, blinds, raise e all-in e a revisão editorial deste relatório.
 
-## Pergunta final
+As conferências automatizadas realizadas abrangeram conservação de fichas e transições dos exemplos, classificação das mãos, cálculos e melhores respostas da matriz, produtos de probabilidade e impacto, consistência entre relatório e materiais, links locais e estrutura dos arquivos. A paginação e a legibilidade dos diagramas e slides foram inspecionadas durante a preparação assistida. Essas verificações dizem respeito aos dados e artefatos descritos; não constituem testes de um motor funcional nem medição da eficácia dos controles.
 
-**Depois que o sistema responder, o que o outro lado aprenderá e tentará fazer em seguida?**
-
-A aprende que call e raise resistem à pressão e pode interpretar check como fraqueza. B observa iniciativa e pode usar check para induzir aposta. A revelação corrige a hipótese de A neste caso, sem produzir conhecimento universal sobre o oponente.
-
-No all-in pré-flop, fold revela a desistência, mas não confirma o blefe. Call seguido da revelação permite observar as cartas e o resultado; a adaptação só vale para uma interação futura, pois não há nova decisão de aposta nessa mão.
-
-Após defesa técnica, o agente aprende quais campos e ações são permitidos. Pode buscar informação pelo histórico, testar limites ou retornar perto do orçamento. O motor deve continuar filtrando saídas, validando ações e preservando fichas e progresso. Inferência legítima permanece no jogo; exposição indevida, adulteração e bloqueio exigem controles e revisão.
+O grupo verificou o conteúdo produzido com assistência de IA por revisão dos materiais, complementando as conferências automatizadas descritas acima.

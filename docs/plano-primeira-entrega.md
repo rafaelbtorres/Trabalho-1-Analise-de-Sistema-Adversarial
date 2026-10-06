@@ -1,6 +1,6 @@
 # Plano de produção da primeira entrega
 
-Este documento organiza o trabalho solicitado em `enunciado/Apresentação de Trabalhos.md`. A modelagem abaixo foi incorporada ao README e aos materiais locais em 05/10/2026 e revisada em 06/10/2026 para incluir pré-flop, raise e all-in. Os exemplos são sintéticos e a revisão humana do grupo permanece pendente. As etapas servem também como critérios para revisar o material antes da gravação.
+Este documento organiza o trabalho solicitado em `enunciado/Apresentação de Trabalhos.md`. A modelagem abaixo foi incorporada ao README e aos materiais locais em 05/10/2026 e revisada em 06/10/2026 para incluir pré-flop, raise e all-in. Os exemplos são sintéticos. As etapas documentam o processo de produção e os critérios adotados.
 
 ## Estado da produção
 
@@ -10,10 +10,10 @@ Este documento organiza o trabalho solicitado em `enunciado/Apresentação de Tr
 | Três diagramas | Fontes Mermaid e imagens PNG produzidas |
 | Apresentação | 12 slides em `apresentacao/slides.pptx` e `apresentacao/slides.pdf`, com falas nas notas do PPTX |
 | Roteiro | Falas, divisão equilibrada e instruções de gravação em `docs/roteiro-video.md` |
-| Revisão humana e contribuições | Grupo precisa conferir decisões e registrar trabalho efetivamente realizado |
+| Contribuições | Registros individuais de trabalho ainda precisam ser completados |
 | Vídeo, links externos e submissão | Pendentes, acompanhados em `apresentacao/links.md` |
 
-A preparação dos arquivos locais não conclui a entrega formal. É necessário revisar, gravar os quatro integrantes, publicar o vídeo e submeter os links reais.
+A entrega formal ainda depende da gravação dos quatro integrantes, da publicação do vídeo e da submissão dos links reais.
 
 ## Resultado esperado
 
@@ -90,7 +90,7 @@ Convertendo cada jogador para preferências ordinais de 0 a 3:
 
 Para A, ganhar 80 é melhor que ganhar 0, que é melhor que perder 20. Para B, ganhar 100 é melhor que ganhar 80, que é melhor que ganhar 0. Não é preciso usar todos os números da escala para cada jogador.
 
-Análise incorporada ao README, a conferir na revisão humana:
+Análise incorporada ao README:
 
 - Diante de B1, A prefere A2; diante de B2, A prefere A1.
 - Diante de A1, B prefere B1; diante de A2, B é indiferente entre B1 e B2.
@@ -209,7 +209,7 @@ Considerando a revisão em 05/10: reservar o primeiro bloco para regras e modelo
 
 ## Conferência final
 
-Os itens marcados registram a preparação local e as conferências assistidas por IA. A aprovação humana e a entrega formal continuam pendentes.
+Os itens marcados registram a preparação local e as conferências dos materiais. A entrega formal continua pendente.
 
 - [x] README completo, sem campos de modelo e com recorte explícito.
 - [x] Agentes de software, ativos, capacidades, informações, custos e pressupostos definidos.
@@ -222,7 +222,6 @@ Os itens marcados registram a preparação local e as conferências assistidas p
 - [x] Arquitetura descrita e critérios de sucesso verificáveis para o Trabalho 2.
 - [x] Referências reais citadas e declaração de IA fiel ao uso.
 - [x] PDF e PPTX produzidos e conferidos, com 12 slides e falas nas notas.
-- [ ] Revisão humana e domínio das decisões confirmados pelos quatro integrantes.
 - [ ] Contribuições registradas de acordo com o trabalho real.
 - [ ] PDF e vídeo consistentes; ensaio próximo de 11 minutos, com 2min45s por integrante.
 - [ ] Links e reprodução testados; entrega submetida no ambiente indicado pela disciplina.

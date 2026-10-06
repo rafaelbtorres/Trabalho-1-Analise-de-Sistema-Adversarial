@@ -19,8 +19,7 @@ O repositório remoto e as contribuições individuais devem ser conferidos. Nã
 
 ## Passos restantes
 
-1. Revisar relatório, slides e fontes, compreendendo todas as decisões.
-2. Registrar contribuições reais conforme a autoria de cada integrante.
-3. Ensaiar os blocos e gravar usando o roteiro.
-4. Publicar PDF e vídeo e testar acesso sem autenticação do autor.
-5. Registrar links reais aqui e submeter no ambiente indicado até 06/10 às 23h59.
+1. Completar os registros das contribuições reais conforme a autoria de cada integrante.
+2. Ensaiar os blocos e gravar usando o roteiro.
+3. Publicar PDF e vídeo e testar acesso sem autenticação do autor.
+4. Registrar links reais aqui e submeter no ambiente indicado até 06/10 às 23h59.

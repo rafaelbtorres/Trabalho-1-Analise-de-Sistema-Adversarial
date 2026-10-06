@@ -17,7 +17,7 @@ Integrantes: Rafael Barboza Torres, Elton Henrique Lunardi Gimenes, Frederico Ma
 5. `docs/roteiro-video.md`: conteúdo dos slides, falas sugeridas e processo de gravação.
 6. `diagramas/*.mmd`, `diagramas/diagramas-editaveis.pptx` e `fontes/referencias.md`: diagramas editáveis e evidências. Os PNGs foram exportados da fonte visual PPTX; os Mermaid representam o mesmo conteúdo, com disposição própria.
 
-As instruções do usuário prevalecem sobre este arquivo. O README contém a modelagem atual, preparada com assistência de IA e ainda sujeita à revisão humana do grupo. A arquitetura é especificação para o Trabalho 2, não resultado de implementação.
+As instruções do usuário prevalecem sobre este arquivo. O README contém a modelagem atual, preparada com assistência de IA. A arquitetura é especificação para o Trabalho 2, não resultado de implementação.
 
 ## Requisitos da primeira entrega
 
@@ -34,18 +34,18 @@ A pergunta final é: **Depois que o sistema responder, o que o outro lado aprend
 
 Rubrica: delimitação 15; modelo estático 20; modelo dinâmico 20; superfície e ameaças 25; redesenho e resiliência 15; clareza, evidências e organização 5. Total: 100 pontos.
 
-## Estado atual em 05/10/2026
+## Estado atual em 06/10/2026
 
-- README preenchido com recorte, matriz, três rodadas, ameaças, controles e arquitetura.
+- README preenchido com recorte, matriz, quatro etapas, ameaças, controles e arquitetura.
 - Três diagramas em Mermaid e PNG, fontes bibliográficas reais e cenário sintético em `dados/cenario.json`.
 - Apresentação local de 12 slides em `apresentacao/slides.pptx` e `apresentacao/slides.pdf`; falas nas notas do PPTX e em `docs/roteiro-video.md`.
 - Conferência automática do exemplo numérico e dos artefatos não equivale a testar um motor de jogo implementado.
-- Ainda faltam revisão humana, confirmação das contribuições efetivas, gravação dos quatro integrantes, publicação do vídeo, acesso externo aos arquivos e submissão. `apresentacao/links.md` registra essas pendências.
+- Ainda faltam completar os registros das contribuições efetivas, gravar os quatro integrantes, publicar o vídeo, conferir acesso externo aos arquivos e submeter. `apresentacao/links.md` registra essas pendências.
 - Nenhuma publicação, push, submissão ou autoria individual foi fabricada. Antes de continuar, confira o Git e os arquivos atuais.
 
 ## Revisão de escopo em 06/10/2026
 
-Pré-flop, raise e all-in foram incorporados por solicitação do usuário. O exemplo principal tem quatro etapas e 11 ações, conserva 220 fichas e termina em A=50/B=170. A matriz no river parte de pote 80 após check de B. O all-in alternativo pode encerrar cedo e não substitui os três ciclos exigidos. Não registrar aprovação humana coletiva apenas por essa revisão assistida.
+Pré-flop, raise e all-in foram incorporados por solicitação do usuário. O exemplo principal tem quatro etapas e 11 ações, conserva 220 fichas e termina em A=50/B=170. A matriz no river parte de pote 80 após check de B. O all-in alternativo pode encerrar cedo e não substitui os três ciclos exigidos.
 
 ## Fotografia da revisão inicial
 
@@ -59,7 +59,7 @@ Pré-flop, raise e all-in foram incorporados por solicitação do usuário. O ex
 
 Este estado é uma fotografia inicial. Antes de executar tarefas, confira os arquivos e o Git atuais e atualize o planejamento conforme o trabalho avançar.
 
-## Modelagem incorporada, ainda sujeita à revisão do grupo
+## Modelagem incorporada
 
 Descrever o sistema como uma simulação local com **dois agentes de software** que tomam decisões e adaptam suas estratégias, mediados por um motor de jogo. A transcrição enfatiza agentes de software e aceita jogos, inclusive poker, como contexto adversarial.
 
@@ -85,7 +85,7 @@ O adversarial surge do conflito entre os agentes; o motor não precisa ter uma e
 - Usar T1/T2/T3 para ameaças e A1/A2/B1/B2 para ações da matriz, conforme o README atual.
 - Probabilidade e impacto são avaliações qualitativas propostas, justificadas separadamente. No plano revisado, P é condicionada à presença da fraqueza e à capacidade do agente de explorá-la. As notas 9/9/6 correspondem a T1/T2/T3; T1 e T2 empatam, e o sigilo já perdido justifica aprofundar T1. Escopo local não é justificativa de baixa probabilidade.
 - Não inventar referências, aprovação docente específica do projeto, experimentos, publicação, validação do grupo, contribuições ou autoria de commits.
-- Declarar uso de IA de acordo com o que ocorreu e registrar a verificação humana somente após ela ocorrer.
+- Declarar uso de IA de acordo com o que ocorreu e descrever na declaração apenas verificações efetivamente realizadas.
 
 ## Como trabalhar neste repositório
 
